@@ -1,0 +1,482 @@
+<title>The Legal Rail</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper: #eef0ec;
+    --paper-raised: #f8f9f6;
+    --ink: #16202e;
+    --ink-soft: #4b5566;
+    --ink-faint: #838d9c;
+    --accent: #24406b;
+    --accent-deep: #16283f;
+    --accent-tint: #e2e8f1;
+    --line: #d4d6cd;
+    --line-soft: #e3e4dc;
+    --good: #2f7a4f;
+    --good-tint: #e3efe6;
+    --warn: #b8862f;
+    --warn-tint: #f4ecd9;
+    --bad: #a13a2f;
+    --bad-tint: #f5e3e0;
+    --focus: #24406b;
+    --shadow: 0 1px 2px rgba(22,32,46,0.06), 0 8px 22px rgba(22,32,46,0.06);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper: #10151d;
+      --paper-raised: #171d27;
+      --ink: #e8eaee;
+      --ink-soft: #aab2c0;
+      --ink-faint: #6e7686;
+      --accent: #86a8de;
+      --accent-deep: #c3d4f0;
+      --accent-tint: #1c2a3d;
+      --line: #2a3140;
+      --line-soft: #212734;
+      --good: #6cbf8f;
+      --good-tint: #16281e;
+      --warn: #dcae5f;
+      --warn-tint: #2c2314;
+      --bad: #e08476;
+      --bad-tint: #2c1a17;
+      --focus: #86a8de;
+      --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 10px 26px rgba(0,0,0,0.4);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper: #10151d;
+    --paper-raised: #171d27;
+    --ink: #e8eaee;
+    --ink-soft: #aab2c0;
+    --ink-faint: #6e7686;
+    --accent: #86a8de;
+    --accent-deep: #c3d4f0;
+    --accent-tint: #1c2a3d;
+    --line: #2a3140;
+    --line-soft: #212734;
+    --good: #6cbf8f;
+    --good-tint: #16281e;
+    --warn: #dcae5f;
+    --warn-tint: #2c2314;
+    --bad: #e08476;
+    --bad-tint: #2c1a17;
+    --focus: #86a8de;
+    --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 10px 26px rgba(0,0,0,0.4);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"Public Sans", ui-sans-serif, system-ui, sans-serif; font-size:16px; line-height:1.65; }
+  a{ color:var(--accent); text-decoration-thickness:1px; text-underline-offset:2px; }
+  a:focus-visible, button:focus-visible{ outline:2px solid var(--focus); outline-offset:2px; border-radius:2px; }
+  ::selection{ background:var(--accent-tint); }
+  h1,h2,h3,h4{ font-family:"Source Serif 4", Georgia, serif; font-weight:600; color:var(--ink); text-wrap:balance; margin:0; }
+  .mono{ font-family:"JetBrains Mono", ui-monospace, "SF Mono", Consolas, monospace; font-variant-numeric:tabular-nums; }
+  p{ margin:0 0 1em; }
+  .wrap{ max-width:900px; margin:0 auto; padding:0 24px; }
+
+  /* Masthead */
+  .masthead{ border-bottom:1px solid var(--line); padding:44px 0 30px; }
+  .masthead .kicker{ display:flex; align-items:center; gap:10px; font-family:"JetBrains Mono"; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:18px; }
+  .kicker .dot{ width:7px; height:7px; border-radius:50%; background:var(--accent); flex:none; }
+  .masthead h1{ font-size:clamp(2.1rem,4.6vw,3rem); line-height:1.06; letter-spacing:-0.01em; max-width:17ch; }
+  .masthead .dek{ margin-top:15px; font-size:1.08rem; color:var(--ink-soft); max-width:62ch; }
+  .meta-row{ margin-top:22px; display:flex; flex-wrap:wrap; gap:8px 22px; font-family:"JetBrains Mono"; font-size:11.5px; color:var(--ink-faint); }
+  .meta-row b{ color:var(--ink-soft); font-weight:600; }
+
+  .stat-strip{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); margin:28px 0 0; }
+  .stat{ background:var(--paper-raised); padding:16px 16px 14px; }
+  .stat .n{ font-family:"JetBrains Mono"; font-size:clamp(1.25rem,2.4vw,1.6rem); font-weight:700; color:var(--accent); }
+  .stat .l{ font-size:11.5px; color:var(--ink-soft); margin-top:4px; line-height:1.4; }
+  @media (max-width:640px){ .stat-strip{ grid-template-columns:repeat(2,1fr); } }
+
+  .toc{ margin-top:24px; }
+  .toc-list{ list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:7px; }
+  .toc-list a{ font-family:"JetBrains Mono"; font-size:11px; padding:6px 11px; border:1px solid var(--line); border-radius:3px; color:var(--ink-soft); text-decoration:none; background:var(--paper-raised); }
+  .toc-list a:hover{ border-color:var(--accent); color:var(--accent); }
+
+  section{ padding:52px 0; border-bottom:1px solid var(--line); }
+  section:last-of-type{ border-bottom:none; }
+  .section-head{ margin-bottom:24px; max-width:68ch; }
+  .section-head .eyebrow{ font-family:"JetBrains Mono"; font-size:11.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:10px; display:block; }
+  .section-head h2{ font-size:clamp(1.45rem,2.5vw,1.85rem); }
+  .section-head p{ margin-top:12px; color:var(--ink-soft); font-size:0.98rem; }
+  .prose{ max-width:68ch; }
+  .prose p{ font-size:0.98rem; }
+  .prose strong{ font-weight:600; color:var(--ink); }
+  .prose em{ font-style:italic; }
+
+  .pullquote{
+    max-width:68ch; font-family:"Source Serif 4"; font-style:italic; font-size:1.28rem; line-height:1.5;
+    color:var(--ink); border-left:3px solid var(--accent); padding:4px 0 4px 22px; margin:26px 0;
+  }
+
+  .table-scroll{ overflow-x:auto; border:1px solid var(--line); background:var(--paper-raised); }
+  table{ border-collapse:collapse; width:100%; min-width:620px; font-size:0.9rem; }
+  thead th{ text-align:left; font-family:"JetBrains Mono"; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); font-weight:600; padding:10px 14px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  tbody td{ padding:11px 14px; border-bottom:1px solid var(--line-soft); vertical-align:top; }
+  tbody tr:last-child td{ border-bottom:none; }
+  tbody td.src{ color:var(--ink-soft); }
+  tbody td a{ color:var(--ink); }
+
+  .status-pill{ font-family:"JetBrains Mono"; font-size:10.5px; letter-spacing:.04em; text-transform:uppercase; padding:3px 8px; border-radius:3px; white-space:nowrap; }
+  .status-pill.good{ background:var(--good-tint); color:var(--good); }
+  .status-pill.warn{ background:var(--warn-tint); color:var(--warn); }
+  .status-pill.bad{ background:var(--bad-tint); color:var(--bad); }
+
+  /* Diagram */
+  figure.diagram{ margin:0; border:1px solid var(--line); background:var(--paper-raised); padding:20px 18px 16px; }
+  figure.diagram svg{ width:100%; height:auto; display:block; color:var(--ink); }
+  figure.diagram figcaption{ font-size:12.5px; color:var(--ink-faint); margin-top:12px; font-family:"JetBrains Mono"; }
+
+  /* Component cards */
+  .component-grid{ display:grid; gap:1px; background:var(--line); border:1px solid var(--line); }
+  .component{ background:var(--paper-raised); padding:18px 22px; display:grid; grid-template-columns:34px 1fr; gap:16px; }
+  .component .idx{ font-family:"JetBrains Mono"; font-size:12px; font-weight:700; color:var(--accent); border:1px solid var(--accent); border-radius:50%; width:30px; height:30px; display:flex; align-items:center; justify-content:center; }
+  .component h4{ font-size:1.05rem; margin-bottom:6px; }
+  .component p{ font-size:0.9rem; color:var(--ink-soft); margin:0; }
+
+  /* Feasibility scorecard */
+  .feas-scorecard{ display:grid; gap:11px; margin:18px 0 6px; padding:16px 18px; background:color-mix(in srgb, var(--paper) 55%, var(--paper-raised)); border:1px solid var(--line); }
+  .feas-row{ display:grid; grid-template-columns:150px 1fr auto; gap:12px; align-items:center; }
+  .feas-row .flabel{ color:var(--ink-soft); font-family:"JetBrains Mono"; font-size:11px; }
+  .feas-row .fbar{ height:6px; border-radius:3px; background:var(--line); overflow:hidden; }
+  .feas-row .fbar i{ display:block; height:100%; border-radius:3px; }
+  .feas-row .fnote{ color:var(--ink-faint); font-size:11px; text-align:right; white-space:nowrap; }
+  @media (max-width:560px){ .feas-row{ grid-template-columns:108px 1fr; } .feas-row .fnote{ grid-column:1/-1; text-align:left; } }
+
+  /* Phase timeline */
+  .phase-list{ display:grid; gap:1px; background:var(--line); border:1px solid var(--line); margin-top:18px; }
+  .phase{ background:var(--paper-raised); padding:18px 22px; display:grid; grid-template-columns:100px 1fr; gap:18px; }
+  .phase .ph{ font-family:"JetBrains Mono"; font-size:11px; color:var(--ink-faint); line-height:1.5; }
+  .phase .ph b{ display:block; color:var(--accent); font-size:13px; }
+  .phase h4{ font-size:1rem; margin-bottom:6px; }
+  .phase p{ font-size:0.9rem; color:var(--ink-soft); margin:0; }
+  @media (max-width:560px){ .phase{ grid-template-columns:1fr; } }
+
+  /* Challenge list — fixed pattern: absolute badge + padding-left (NOT grid, avoids text-splitting bug) */
+  .challenge-list{ list-style:none; margin:0; padding:0; display:grid; gap:14px; counter-reset:ch; }
+  .challenge-list li{ counter-increment:ch; position:relative; padding-left:36px; font-size:0.95rem; color:var(--ink-soft); }
+  .challenge-list li::before{
+    content:counter(ch); font-family:"JetBrains Mono"; font-size:11px; font-weight:700; color:var(--bad);
+    border:1px solid var(--bad); border-radius:50%; width:23px; height:23px;
+    display:flex; align-items:center; justify-content:center; position:absolute; left:0; top:1px;
+  }
+  .challenge-list li b{ color:var(--ink); font-weight:600; }
+
+  .precedent-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
+  .precedent{ background:var(--paper-raised); padding:18px 20px; }
+  .precedent .country{ font-family:"JetBrains Mono"; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
+  .precedent h4{ font-size:1.02rem; margin-bottom:6px; }
+  .precedent p{ font-size:0.87rem; color:var(--ink-soft); margin:0; }
+  @media (max-width:600px){ .precedent-grid{ grid-template-columns:1fr; } }
+
+  .recommend{ border:1px solid var(--line); background:var(--paper-raised); box-shadow:var(--shadow); padding:26px 28px 30px; }
+  .recommend .tag{ font-family:"JetBrains Mono"; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); margin-bottom:10px; }
+  .recommend h3{ font-size:1.35rem; margin-bottom:14px; }
+
+  footer{ padding:40px 0 60px; }
+  .sources{ columns:2 260px; column-gap:32px; }
+  .sources li{ font-size:12px; color:var(--ink-faint); margin-bottom:8px; break-inside:avoid; }
+  .sources a{ color:var(--ink-soft); }
+  .colophon{ margin-top:34px; padding-top:20px; border-top:1px solid var(--line); font-family:"JetBrains Mono"; font-size:11px; color:var(--ink-faint); }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <div class="kicker"><span class="dot"></span> RESEARCH BRIEF &nbsp;·&nbsp; JUSTICE-SECTOR INFRASTRUCTURE &nbsp;·&nbsp; NIGERIA</div>
+    <h1>The Legal Rail</h1>
+    <p class="dek">What NIBSS did for money moving between banks, this proposes for a case moving between police, prosecution, courts, and corrections — a shared interoperability layer under Nigeria's existing justice institutions, not a new court system on top of them.</p>
+    <div class="meta-row">
+      <span><b>Prepared</b> 24 August 2026</span>
+      <span><b>Scope</b> Federal &amp; state criminal justice infrastructure</span>
+      <span><b>Follows on from</b> the Case Backlog &amp; Decongestion Tracker system</span>
+    </div>
+    <div class="stat-strip">
+      <div class="stat"><div class="n">10+</div><div class="l">separately built, non-interoperable case-management systems since 2013</div></div>
+      <div class="stat"><div class="n">36/36</div><div class="l">states adopted a uniform criminal procedure law — zero adopted a shared case ID</div></div>
+      <div class="stat"><div class="n">~70%</div><div class="l">of the prison population is awaiting trial, not convicted</div></div>
+      <div class="stat"><div class="n">118/140</div><div class="l">Nigeria's World Justice Project rule-of-law rank</div></div>
+    </div>
+    <nav class="toc">
+      <ul class="toc-list">
+        <li><a href="#concept">01 What a legal rail is</a></li>
+        <li><a href="#problem">02 The problem</a></li>
+        <li><a href="#existing">03 What already exists</a></li>
+        <li><a href="#architecture">04 The architecture</a></li>
+        <li><a href="#governance">05 Governance</a></li>
+        <li><a href="#feasibility">06 Feasibility &amp; phasing</a></li>
+        <li><a href="#challenges">07 Key challenges</a></li>
+        <li><a href="#precedents">08 Precedents</a></li>
+        <li><a href="#start">09 Where to start</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="concept">
+    <div class="section-head">
+      <span class="eyebrow">01 · The Concept</span>
+      <h2>Not a new court system — a shared spine underneath the ones that exist</h2>
+      <p>Nigeria already has a working model for this, and it isn't foreign. It's the one that moves money.</p>
+    </div>
+    <div class="prose">
+      <p>Before 2011, moving money between two Nigerian banks meant each bank's systems talking to the other's through slow, bilateral, often manual settlement. The <strong>Nigeria Inter-Bank Settlement System (NIBSS)</strong> didn't replace any bank's core banking software — it sat underneath all of them as a shared utility, owned jointly by the banks and regulated by the CBN, so a transfer initiated at one bank could clear and settle at another in seconds. The <strong>Bank Verification Number (BVN)</strong> that followed did the identity-side equivalent: one verified identity per person, usable across every participating institution instead of each bank re-verifying the same customer from scratch.</p>
+      <p>A <strong>legal rail</strong> is the same idea applied to a case instead of a payment. Right now, when someone is arrested, the police open a file. If it reaches trial, the court opens a <em>different</em> file, often re-keyed by hand from the police paperwork. If the person is remanded, the correctional service opens a <em>third</em> file. If there's an appeal, a fourth. Each institution's record-keeping has, in the last decade, gone digital — but independently, on different vendors, with no shared identifier connecting the four files as one case. The rail is the layer that would let a single case reference number persist across all four, the way a BVN persists across every bank a customer uses — without requiring the police, the courts, or the correctional service to give up the case-management systems they've already built.</p>
+    </div>
+    <div class="pullquote">The gap isn't that Nigeria's justice institutions haven't gone digital. It's that they've all gone digital separately.</div>
+  </section>
+
+  <section id="problem">
+    <div class="section-head">
+      <span class="eyebrow">02 · The Problem</span>
+      <h2>A decade of disconnected digitisation</h2>
+      <p>This isn't a hypothetical gap — it's the documented result of roughly ten years of good-faith, uncoordinated investment.</p>
+    </div>
+    <div class="prose">
+      <p>Starting with the Lagos State Judiciary's Cinfores-built court information system in 2013, Nigerian courts and allied institutions have built at least ten separate digital case-management platforms: the Federal High Court portal (2016), Rivers State's RIVCOMIS (2020), the federal Nigeria Case Management System e-filing platform (2020), Ogun State's judiciary e-registry (2021), Oyo State's CMIS (2022), Ondo State's CMIS (2024), Lagos's dedicated Magistrate/Small Claims system LagosCoMiS, plus separate systems in Delta, Imo, and Abia states — and, in 2026, the Federal High Court's new e-filing system and the Supreme Court's National Case Management System with mandatory e-filing. Each is a real achievement. None of them share a case identifier, a data schema, or an API with any of the others. Academic research on the subject describes exactly this pattern: <em>"fragmentation of technological adoption across states and divisions created disparities in case management and access to justice"</em> — the digitisation happened; the interoperability didn't.</p>
+      <p>The clearest evidence that this is an infrastructure gap and not a legal one: <strong>by September 2023, all 36 states had adopted the Administration of Criminal Justice Law (ACJL)</strong> — the state-level equivalent of the 2015 federal Administration of Criminal Justice Act (ACJA) — making Nigeria's criminal procedure rules uniform nationwide for the first time in its history. That uniform law imposes real, specific timelines: trial must commence within 30 days of arraignment in Magistrate courts and conclude within 180 days; once arraigned, trial proceeds day-to-day with no more than five adjournments per party at intervals no longer than 14 working days; the Comptroller-General of Corrections must report every three months on anyone held past 180 days without conviction. A nine-member Administration of Criminal Justice Monitoring Committee (ACJMC), chaired by the Chief Judge of the FCT, exists by statute specifically to monitor compliance with all of this.</p>
+      <p>And yet none of it is monitorable in real time, because monitoring a 30-day or 180-day clock requires knowing when a case crossed each institutional boundary — arrest, charge, arraignment, remand — and that information currently lives in four unconnected systems. The uniform law arrived; the shared infrastructure to police it did not. The result shows up directly in the prison population: of roughly 76,000 inmates nationwide, close to 70% — around 52,000 people — are awaiting trial rather than convicted, many held well past the statutory limits the ACJL itself sets. Nigeria ranks 118th of 140 countries on the World Justice Project's Rule of Law Index, with its criminal justice pillar among the weaker components of that score.</p>
+    </div>
+  </section>
+
+  <section id="existing">
+    <div class="section-head">
+      <span class="eyebrow">03 · The Landscape</span>
+      <h2>What already exists — don't build an eleventh system</h2>
+      <p>The rail's job is to connect what's already been built, not add to the pile. Here's the pile.</p>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>System / institution</th><th>Covers</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Supreme Court NCMS + mandatory e-filing</td><td class="src">Apex court appeals, electronic diary, digital SAN conferment, digital call-to-bar</td><td><span class="status-pill good">Live 2026</span></td></tr>
+          <tr><td>Federal High Court e-filing</td><td class="src">Federal High Court, Lagos division launch</td><td><span class="status-pill good">Live Apr 2026</span></td></tr>
+          <tr><td>LagosCoMiS (Cinfores)</td><td class="src">Lagos Magistrate &amp; Small Claims Courts</td><td><span class="status-pill good">Live since 2013</span></td></tr>
+          <tr><td>RIVCOMIS</td><td class="src">Rivers State courts</td><td><span class="status-pill good">Live since 2020</span></td></tr>
+          <tr><td>Ogun, Oyo, Ondo, Delta, Imo, Abia state systems</td><td class="src">Respective state judiciaries</td><td><span class="status-pill good">Live, 2021–2024</span></td></tr>
+          <tr><td>PPDC Court Admin. &amp; Case Mgmt. (CACM)</td><td class="src">Virtual courts in Lagos, Kaduna, Gombe, FCT (INL-funded)</td><td><span class="status-pill good">Live, multi-state</span></td></tr>
+          <tr><td>NCoS Act 2019 digital inmate platform</td><td class="src">16 custodial centres — biometric + case-history capture</td><td><span class="status-pill warn">Partial rollout</span></td></tr>
+          <tr><td>NPF digital case management (SPAAT/UNDP)</td><td class="src">Legal Directorate HQ + 15 state commands, biometric-linked</td><td><span class="status-pill warn">Partial rollout</span></td></tr>
+          <tr><td>NBA digital practice licence + verification portal</td><td class="src">Lawyer identity/standing lookup nationwide</td><td><span class="status-pill good">Live</span></td></tr>
+          <tr><td>ACJMC quarterly compliance returns</td><td class="src">Statutory monitoring of ACJA timelines</td><td><span class="status-pill bad">Paper-based, no public dashboard</span></td></tr>
+          <tr><td>Partners West Africa Nigeria — ACJL Tracker</td><td class="src">Civil-society tracking of state ACJL implementation</td><td><span class="status-pill good">Live, independent</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="prose" style="margin-top:18px; max-width:68ch; font-size:0.95rem; color:var(--ink-soft);">Legally, the ground is also more prepared than it looks: <strong>Section 84 of the Evidence Act 2011</strong> already makes computer-generated documents admissible, and <strong>Section 17 of the Cybercrimes Act 2015</strong> already makes electronic signatures binding. A legal rail doesn't need new legislation to make its data admissible in court — that door is already open.</p>
+  </section>
+
+  <section id="architecture">
+    <div class="section-head">
+      <span class="eyebrow">04 · The Architecture</span>
+      <h2>What the rail actually is</h2>
+      <p>Five components, none of which require replacing a single existing system.</p>
+    </div>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 900 400" role="img" aria-label="Comparison diagram: today, four justice institutions each keep a separate, disconnected case file for the same person; with a legal rail, all four push status events to one shared case reference number that persists from arrest through appeal.">
+        <text x="0" y="22" font-family="JetBrains Mono" font-size="11" letter-spacing="0.06em" fill="currentColor" opacity="0.55">TODAY — FOUR CASE FILES, FOUR CASE NUMBERS</text>
+        <g font-family="Public Sans" font-size="12">
+          <g transform="translate(60,50)">
+            <rect x="0" y="0" width="140" height="44" rx="3" fill="none" stroke="currentColor" opacity="0.5"/>
+            <text x="70" y="19" text-anchor="middle" fill="currentColor">Police / FIR</text>
+            <text x="70" y="34" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="currentColor" opacity="0.6">FILE #A-118</text>
+          </g>
+          <g transform="translate(280,50)">
+            <rect x="0" y="0" width="140" height="44" rx="3" fill="none" stroke="currentColor" opacity="0.5"/>
+            <text x="70" y="19" text-anchor="middle" fill="currentColor">Court / Trial</text>
+            <text x="70" y="34" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="currentColor" opacity="0.6">SUIT #CR/44</text>
+          </g>
+          <g transform="translate(500,50)">
+            <rect x="0" y="0" width="140" height="44" rx="3" fill="none" stroke="currentColor" opacity="0.5"/>
+            <text x="70" y="19" text-anchor="middle" fill="currentColor">Corrections</text>
+            <text x="70" y="34" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="currentColor" opacity="0.6">INMATE #7702</text>
+          </g>
+          <g transform="translate(720,50)">
+            <rect x="0" y="0" width="140" height="44" rx="3" fill="none" stroke="currentColor" opacity="0.5"/>
+            <text x="70" y="19" text-anchor="middle" fill="currentColor">Appeal Court</text>
+            <text x="70" y="34" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="currentColor" opacity="0.6">APP #91/26</text>
+          </g>
+        </g>
+        <g stroke="var(--bad)" stroke-width="1.6" stroke-dasharray="4 4" fill="none">
+          <line x1="200" y1="72" x2="280" y2="72"/>
+          <line x1="420" y1="72" x2="500" y2="72"/>
+          <line x1="640" y1="72" x2="720" y2="72"/>
+        </g>
+        <g font-family="JetBrains Mono" font-size="9.5" fill="var(--bad)">
+          <text x="240" y="65" text-anchor="middle">re-keyed by hand</text>
+          <text x="460" y="65" text-anchor="middle">no link</text>
+          <text x="680" y="65" text-anchor="middle">no link</text>
+        </g>
+
+        <text x="0" y="150" font-family="JetBrains Mono" font-size="11" letter-spacing="0.06em" fill="currentColor" opacity="0.55">WITH A LEGAL RAIL — ONE CASE REFERENCE NUMBER, START TO FINISH</text>
+
+        <g font-family="Public Sans" font-size="12">
+          <g transform="translate(60,175)">
+            <rect x="0" y="0" width="140" height="44" rx="3" fill="none" stroke="currentColor"/>
+            <text x="70" y="19" text-anchor="middle" fill="currentColor">Police / FIR</text>
+          </g>
+          <g transform="translate(280,175)">
+            <rect x="0" y="0" width="140" height="44" rx="3" fill="none" stroke="currentColor"/>
+            <text x="70" y="19" text-anchor="middle" fill="currentColor">DPP Review</text>
+          </g>
+          <g transform="translate(500,175)">
+            <rect x="0" y="0" width="140" height="44" rx="3" fill="none" stroke="currentColor"/>
+            <text x="70" y="19" text-anchor="middle" fill="currentColor">Arraignment &amp; Trial</text>
+          </g>
+          <g transform="translate(720,175)">
+            <rect x="0" y="0" width="140" height="44" rx="3" fill="none" stroke="currentColor"/>
+            <text x="70" y="19" text-anchor="middle" fill="currentColor">Corrections / Appeal</text>
+          </g>
+        </g>
+
+        <line x1="130" y1="219" x2="130" y2="270" stroke="var(--accent)" stroke-width="1.6"/>
+        <line x1="350" y1="219" x2="350" y2="270" stroke="var(--accent)" stroke-width="1.6"/>
+        <line x1="570" y1="219" x2="570" y2="270" stroke="var(--accent)" stroke-width="1.6"/>
+        <line x1="790" y1="219" x2="790" y2="270" stroke="var(--accent)" stroke-width="1.6"/>
+        <g font-family="JetBrains Mono" font-size="9.5" fill="var(--accent)">
+          <text x="145" y="248" text-anchor="start">pushes status</text>
+          <text x="365" y="248" text-anchor="start">pushes status</text>
+          <text x="585" y="248" text-anchor="start">pushes status</text>
+          <text x="805" y="248" text-anchor="start">pushes status</text>
+        </g>
+
+        <line x1="60" y1="285" x2="860" y2="285" stroke="var(--accent)" stroke-width="3"/>
+        <circle cx="60" cy="285" r="4" fill="var(--accent)"/>
+        <circle cx="860" cy="285" r="4" fill="var(--accent)"/>
+        <text x="460" y="278" text-anchor="middle" font-family="JetBrains Mono" font-size="11" font-weight="700" fill="var(--accent)">CRN-2026-000482</text>
+        <text x="460" y="306" text-anchor="middle" font-family="JetBrains Mono" font-size="9.5" fill="currentColor" opacity="0.6">the legal rail — one persistent case reference number</text>
+
+        <line x1="860" y1="285" x2="860" y2="340" stroke="currentColor" stroke-width="1.2"/>
+        <g transform="translate(760,340)">
+          <rect x="0" y="0" width="200" height="40" rx="3" fill="none" stroke="currentColor"/>
+          <text x="100" y="17" text-anchor="middle" font-size="11.5" fill="currentColor">ACJMC</text>
+          <text x="100" y="31" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="currentColor" opacity="0.6">reads live compliance</text>
+        </g>
+      </svg>
+      <figcaption>Today, the same person accumulates four unlinked case files across four institutions. With a rail, each institution keeps its own system but pushes minimal status events to one persistent reference number — which the ACJMC can read against ACJA's statutory clocks in real time.</figcaption>
+    </figure>
+
+    <div class="component-grid" style="margin-top:20px;">
+      <div class="component"><span class="idx">1</span><div><h4>Universal Case Reference Number (CRN)</h4><p>Generated at first institutional touch — arrest or civil filing — and carried through every subsequent stage, the way the UK's Common Platform gave police, CPS, and courts one shared Unique Reference Number instead of three.</p></div></div>
+      <div class="component"><span class="idx">2</span><div><h4>Participant registry</h4><p>A verified directory of every institutional node allowed to write to the rail — court registries, police divisions, NCoS facilities, Legal Aid Council offices, licensed counsel via the NBA's existing verification portal — mirroring how NIBSS verifies participant banks before they can settle.</p></div></div>
+      <div class="component"><span class="idx">3</span><div><h4>Status-event feed, not a records replacement</h4><p>Institutions keep their own case-management systems (LagosCoMiS, RIVCOMIS, the NCMS) exactly as built, and push a small set of status events — charged, arraigned, adjourned, remanded, convicted, released, appealed — to the shared index. No institution has to migrate off what it already has.</p></div></div>
+      <div class="component"><span class="idx">4</span><div><h4>ACJA-timeline compliance engine</h4><p>Automatically computes each case's position against the 30-day/180-day trial clock, the day-to-day trial rule, and the five-adjournment limit, flagging breaches the moment they occur — the tool the ACJMC's statutory mandate currently has no way to execute in real time.</p></div></div>
+      <div class="component"><span class="idx">5</span><div><h4>Tiered access</h4><p>Full compliance dashboards for the ACJMC and Chief Judges; operational case status for police, courts, and NCoS; a triage feed of unrepresented, past-deadline detainees for the Legal Aid Council; aggregate, anonymised statistics only for the public — the presumption of innocence stays intact by design.</p></div></div>
+    </div>
+  </section>
+
+  <section id="governance">
+    <div class="section-head">
+      <span class="eyebrow">05 · Governance</span>
+      <h2>Who would actually run this</h2>
+      <p>The honest answer starts from who already has the legal mandate — because building the mandate from scratch is the harder problem.</p>
+    </div>
+    <div class="prose">
+      <p>NIBSS works as a governance model because it's owned by the institutions that use it (the banks) and regulated by the one body with authority over all of them (the CBN). The justice sector doesn't have a CBN-equivalent — the police answer to the executive, the judiciary is constitutionally independent of the executive, corrections sits inside the Ministry of Interior, and the Bar is self-regulating. No single agency can simply mandate a rail across all four the way the CBN can mandate a settlement standard across licensed banks.</p>
+      <p>But it isn't a governance vacuum, either. <strong>The ACJMC already exists by statute</strong>, created by the ACJA itself, chaired by the Chief Judge of the FCT, with a nine-member composition designed to span the relevant institutions and an explicit legal mandate to monitor exactly the compliance questions a rail would answer. The most credible ownership path is not inventing a new authority — it's giving the ACJMC the digital tooling its existing mandate already calls for, with a technical steering body underneath it drawing formal participation from the NJI (on behalf of the judiciary), the NPF Legal Directorate, the Federal Ministry of Justice/DPP, the Nigerian Correctional Service, the Legal Aid Council, and the NBA — the same set of institutions the ACJMC's own statute already contemplates.</p>
+    </div>
+  </section>
+
+  <section id="feasibility">
+    <div class="section-head">
+      <span class="eyebrow">06 · Feasibility &amp; Phasing</span>
+      <h2>An honest read, and a path that doesn't require boiling the ocean</h2>
+    </div>
+    <div class="feas-scorecard">
+      <div class="feas-row"><span class="flabel">Data readiness</span><span class="fbar"><i style="width:58%;background:var(--warn)"></i></span><span class="fnote">10+ systems exist, none share a schema</span></div>
+      <div class="feas-row"><span class="flabel">Technical</span><span class="fbar"><i style="width:70%;background:var(--good)"></i></span><span class="fnote">A status-event API is a solved pattern (Rwanda, UK)</span></div>
+      <div class="feas-row"><span class="flabel">Legal</span><span class="fbar"><i style="width:80%;background:var(--good)"></i></span><span class="fnote">Evidence Act &amp; Cybercrimes Act already permit it</span></div>
+      <div class="feas-row"><span class="flabel">Political</span><span class="fbar"><i style="width:62%;background:var(--warn)"></i></span><span class="fnote">CJN's 2026 digitalisation push is a real opening</span></div>
+      <div class="feas-row"><span class="flabel">Institutional</span><span class="fbar"><i style="width:35%;background:var(--bad)"></i></span><span class="fnote">Four independent arms, no single mandate authority</span></div>
+    </div>
+
+    <div class="phase-list">
+      <div class="phase">
+        <div class="ph"><b>Phase 1</b>0–12 months</div>
+        <div><h4>Digitise the ACJMC's own statutory function first</h4><p>No new case-ID standard required. Ingest the NCoS's existing quarterly awaiting-trial returns and whatever exports the most mature state systems (Lagos, Rivers, FCT) can already produce. Build the compliance dashboard the ACJMC's mandate already calls for. This alone would have given Nigeria the documented, dated compliance report the ECOWAS Court's 2026 ruling demanded.</p></div>
+      </div>
+      <div class="phase">
+        <div class="ph"><b>Phase 2</b>12–30 months</div>
+        <div><h4>Pilot the Case Reference Number in the three most-digitised jurisdictions</h4><p>Bridge LagosCoMiS, RIVCOMIS, and the federal NCMS behind a shared CRN for new cases only — not a retrofit of the existing backlog — proving the status-event pattern at state scale before asking 33 more states and the federal police to adopt it.</p></div>
+      </div>
+      <div class="phase">
+        <div class="ph"><b>Phase 3</b>30+ months</div>
+        <div><h4>National rollout, identity-linked</h4><p>Extend the CRN standard nationally, link the accused's identity to the NIN and counsel's identity to the NBA's verification number, and open a restricted API for the Legal Aid Council and vetted civil-society partners such as the ACJL Tracker.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="challenges">
+    <div class="section-head">
+      <span class="eyebrow">07 · Key Challenges</span>
+      <h2>What actually stands in the way</h2>
+    </div>
+    <ol class="challenge-list">
+      <li><b>Judicial independence limits how a rail can be imposed.</b> Unlike a bank, a court cannot be compelled by executive regulation to adopt a shared standard — buy-in has to come through the judiciary's own leadership (the CJN, the NJI, state Chief Judges), which is a slower, more fragile path than the CBN-mandates-banks model, and vulnerable to stalling if that leadership changes.</li>
+      <li><b>A decade of vendor lock-in.</b> Cinfores in Lagos and comparable vendors in other states built and maintain the very systems a rail would need to interoperate with, each under its own contract with no built-in incentive to expose an open API to a shared federal layer.</li>
+      <li><b>State policing adds participants, not fewer.</b> As constitutional reform moves toward state-level police forces, the number of independent institutional nodes the rail needs to onboard grows rather than shrinks, at exactly the moment consolidation would be easier with fewer of them.</li>
+      <li><b>Pre-conviction data-sharing is a genuine NDPA 2023 risk.</b> A shared, cross-agency record of someone's case status before conviction — even access-tiered — has to be built around the presumption of innocence and the Nigeria Data Protection Act's purpose-limitation rules from day one, not retrofitted after a breach the way the Open Treasury Portal's decline shows happens when transparency infrastructure ships without hardened data governance.</li>
+      <li><b>Most of the existing pieces are donor-funded pilots.</b> PPDC's CACM project (INL-funded) and the NPF's SPAAT digitisation (UNDP/Germany-funded) are exactly the kind of grant-cycle infrastructure that, without a statutorily funded owner, risks the same fade the Open Treasury Portal experienced after its own launch enthusiasm passed.</li>
+    </ol>
+  </section>
+
+  <section id="precedents">
+    <div class="section-head">
+      <span class="eyebrow">08 · Precedents</span>
+      <h2>Three governments have already built this</h2>
+    </div>
+    <div class="precedent-grid">
+      <div class="precedent"><div class="country">Rwanda</div><h4>IECMS</h4><p>The closest full analogue: one shared platform since 2016 across the Investigation Bureau, Prosecution, Judiciary, Correctional Services, Bar Association, and Bailiffs — 270,000+ users, the entire case lifecycle from filing to execution on a single system.</p></div>
+      <div class="precedent"><div class="country">United Kingdom</div><h4>Common Platform</h4><p>Police, the Crown Prosecution Service, prisons, defence counsel, and the judiciary now share one Unique Reference Number per case — the direct model for the CRN this report proposes, live in every criminal court in England and Wales.</p></div>
+      <div class="precedent"><div class="country">India</div><h4>National Judicial Data Grid</h4><p>A narrower but instructive model: district and High Court case-management systems sync to a central grid daily rather than sharing one live platform — evidence that even loose, batch-synced interoperability delivers real monitoring value.</p></div>
+      <div class="precedent"><div class="country">Nigeria</div><h4>NIBSS &amp; BVN</h4><p>The governance and identity-anchor template this report borrows directly: a shared utility owned by its participants, regulated by one authority, with a persistent identifier usable across every member institution — proven at national scale, in this country, in a different sector.</p></div>
+    </div>
+  </section>
+
+  <section id="start">
+    <div class="recommend">
+      <div class="tag">09 · Recommendation</div>
+      <h3>Start with the compliance dashboard, not the case-ID standard</h3>
+      <p class="prose">The temptation with a project like this is to start with the hardest, most technically ambitious piece — a national Case Reference Number every police division, court, and corrections facility adopts on day one. That's Phase 3, not Phase 1, and pursuing it first is how this kind of infrastructure stalls. The narrower, faster, and institutionally realistic starting point is the ACJMC compliance dashboard: it requires no new identifier standard, draws on data (NCoS quarterly returns, the most mature state court exports) that already exists, plugs into a statutory body that already has the legal mandate to demand it, and answers a question — is Nigeria complying with its own ACJA timelines — that regulators, the ECOWAS Court, and civil-society trackers like the ACJL Tracker are all already asking. It is, in effect, the same lesson the Case Backlog &amp; Decongestion Tracker research already pointed to: partner with the institution that has proven the model and the mandate, rather than building a parallel system that has neither.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="section-head" style="margin-bottom:18px;"><span class="eyebrow">Sources</span></div>
+    <ul class="sources">
+      <li><a href="https://www.lawjournals.org/assets/archives/2026/vol12issue1/12069.pdf" target="_blank" rel="noopener">International Journal of Law — judicial digitisation fragmentation in Nigeria</a></li>
+      <li><a href="https://www.thisdaylive.com/2026/04/28/federal-high-court-launches-e-filing-system-ushers-in-digital-justice-era-in-lagos/" target="_blank" rel="noopener">ThisDay — Federal High Court e-filing launch</a></li>
+      <li><a href="https://www.thisdaylive.com/2026/08/04/the-digital-supreme-court-a-defining-moment-in-nigerias-judicial-reform-journey/" target="_blank" rel="noopener">ThisDay — The Digital Supreme Court</a></li>
+      <li><a href="https://www.vanguardngr.com/2026/07/supreme-court-goes-fully-digital-ditches-paper-records-to-curb-tampering/" target="_blank" rel="noopener">Vanguard — Supreme Court goes fully digital</a></li>
+      <li><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4557938" target="_blank" rel="noopener">Arewa &amp; Fakolade — Digitalization, Fragmentation, and Justice in Nigeria (SSRN)</a></li>
+      <li><a href="https://guardian.ng/news/supreme-court-launches-digital-case-system-makes-e-filing-mandatory/" target="_blank" rel="noopener">The Guardian NG — Supreme Court mandatory e-filing</a></li>
+      <li><a href="https://www.partnersnigeria.org/acjl-tracker/" target="_blank" rel="noopener">Partners West Africa Nigeria — ACJL Tracker</a></li>
+      <li><a href="https://fida.org.ng/wp-content/uploads/2020/11/THE-ADMINISTRATION-OF-CRIMINAL-JUSTICE-ACT-ACJA-2015.pdf" target="_blank" rel="noopener">FIDA Nigeria — ACJA 2015 overview</a></li>
+      <li><a href="https://alliancelawfirm.ng/nine-9-years-on-assessing-the-impact-of-the-administration-of-criminal-justice-act-acja-on-nigerias-criminal-justice-system-and-proposing-reform/" target="_blank" rel="noopener">Alliance Law Firm — Nine years of ACJA impact</a></li>
+      <li><a href="https://acjmc.gov.ng/about-us" target="_blank" rel="noopener">Administration of Criminal Justice Monitoring Committee</a></li>
+      <li><a href="https://prnigeria.com/2026/02/12/ncos-awaiting-trial-inmates/" target="_blank" rel="noopener">PRNigeria — NCoS awaiting-trial inmate figures</a></li>
+      <li><a href="https://www.thediggernews.com/2026/07/24/special-report-delayed-justice-crowded-cells-nigerias-prison-crisis-in-global-perspective/" target="_blank" rel="noopener">The Digger — Delayed Justice, Crowded Cells</a></li>
+      <li><a href="https://worldjusticeproject.org/sites/default/files/documents/Nigeria.pdf" target="_blank" rel="noopener">World Justice Project — Nigeria Rule of Law Index</a></li>
+      <li><a href="https://ecommitteesci.gov.in/service/national-judicial-data-grid/" target="_blank" rel="noopener">India e-Committee — National Judicial Data Grid</a></li>
+      <li><a href="https://www.synisys.com/case-studies/rwandas-justice-sector-integrated-electronic-case-management-system-iecms/" target="_blank" rel="noopener">Synisys — Rwanda's IECMS case study</a></li>
+      <li><a href="https://old.judiciary.gov.rw/fileadmin/IECMS_Info/About_IECMS_-Final.pdf" target="_blank" rel="noopener">Judiciary of Rwanda — About IECMS</a></li>
+      <li><a href="https://www.gov.uk/government/case-studies/common-platform-a-modern-digital-case-management-system-for-the-criminal-justice-system" target="_blank" rel="noopener">GOV.UK — Common Platform case study</a></li>
+      <li><a href="https://insidehmcts.blog.gov.uk/2025/07/31/justice-connected-inside-common-platform/" target="_blank" rel="noopener">HMCTS — Justice Connected: Inside Common Platform</a></li>
+      <li><a href="https://medium.com/@olafioyeseyifunmi/unpacking-the-nigeria-inter-bank-settlement-system-nibss-for-product-managers-d2da1040ed38" target="_blank" rel="noopener">Unpacking NIBSS for Product Managers</a></li>
+      <li><a href="https://nibss-plc.com.ng/how-bvn-is-humanising-nigerias-digital-economy/" target="_blank" rel="noopener">NIBSS — How BVN is humanising Nigeria's digital economy</a></li>
+      <li><a href="https://laws.lawnigeria.com/2019/12/20/nigerian-corrections-services-act-2019/" target="_blank" rel="noopener">Nigerian Correctional Service Act 2019</a></li>
+      <li><a href="https://leadership.ng/centre-trains-correctional-officers-in-digital-inmate-tracking-system/" target="_blank" rel="noopener">Leadership — Digital inmate tracking system training</a></li>
+      <li><a href="https://www.undp.org/nigeria/blog/strengthening-police-accountability-undp-hands-over-ict-and-solar-equipment-nigeria-police-force" target="_blank" rel="noopener">UNDP — SPAAT: ICT support to the Nigeria Police Force</a></li>
+      <li><a href="https://sabilaw.org/evidence-act-2011/" target="_blank" rel="noopener">Evidence Act 2011 (Nigeria)</a></li>
+      <li><a href="https://thenigerialawyer.com/nba-introduces-digital-annual-practice-licenses-for-lawyers-urges-members-to-verify-details/" target="_blank" rel="noopener">NBA — Digital Annual Practice Licences</a></li>
+      <li><a href="https://www.ppdc.org/cacm/" target="_blank" rel="noopener">PPDC — Court Administration and Case Management Project</a></li>
+      <li><a href="https://nji.gov.ng/" target="_blank" rel="noopener">National Judicial Institute, Nigeria</a></li>
+      <li><a href="https://worldjusticeproject.org/rule-of-law-index/country/Nigeria" target="_blank" rel="noopener">WJP Rule of Law Index — Nigeria Insights</a></li>
+    </ul>
+    <div class="colophon">Compiled from open web sources current as of 24 August 2026. Statutory timelines and figures should be re-verified against primary legislation and the ACJMC's own records before use in a formal submission.</div>
+  </footer>
+</div>
