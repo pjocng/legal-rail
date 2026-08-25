@@ -408,6 +408,27 @@
         <div><h4>National rollout, identity-linked</h4><p>Extend the CRN standard nationally, link the accused's identity to the NIN and counsel's identity to the NBA's verification number, and open a restricted API for the Legal Aid Council and vetted civil-society partners such as the ACJL Tracker.</p></div>
       </div>
     </div>
+
+    <div class="section-head" style="margin-top:34px;">
+      <span class="eyebrow">What's actually open, right now</span>
+      <h3 style="font-family:'Source Serif 4'; font-size:1.2rem; font-weight:600;">Free data exists for a national-trend MVP — not for the case-level engine</h3>
+      <p style="margin-top:10px;">Verified directly rather than trusting citations: <span class="mono" style="font-size:0.85em;">corrections.gov.ng/statistics</span> — the page most sources point to for live inmate data — turns out to be the login screen for CIMS, the Corrections Information Management System, gated behind a state selector, officer service number, and password. It's real, and it's almost certainly where the case-level, facility-by-facility awaiting-trial data actually lives, but it's an internal NCoS tool, not open data. The press figures widely cited (e.g. 51,955 awaiting trial, Feb 2026) are NCoS officials releasing numbers from it periodically, not a public export.</p>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Source</th><th>Gives you</th><th>Limitation</th></tr></thead>
+        <tbody>
+          <tr><td><a href="https://www.nigeriarights.gov.ng/nhrc-media/data-and-infographics.html" target="_blank" rel="noopener">NHRC Human Rights Situation Dashboard</a></td><td class="src">Monthly, includes pretrial-detention rate (produced jointly with UNODC)</td><td class="src">National-level, not case-by-case</td></tr>
+          <tr><td><a href="https://www.prisonstudies.org/country/nigeria" target="_blank" rel="noopener">World Prison Brief</a></td><td class="src">Free, monthly-updated pretrial-detention share back to 2000</td><td class="src">National only, no state/case breakdown</td></tr>
+          <tr><td><a href="https://uwazi.io/en/entity/1a38jqvyp2z" target="_blank" rel="noopener">CLEEN Foundation's Uwazi court-digitisation project</a></td><td class="src">Open-source tool + downloadable rulings, built to monitor ACJA compliance</td><td class="src">Scoped to corruption/financial-crime cases only</td></tr>
+          <tr><td><a href="https://www.partnersnigeria.org/acjl-tracker/" target="_blank" rel="noopener">Partners West Africa Nigeria — ACJL Tracker</a></td><td class="src">Confirms which states passed ACJL, and when</td><td class="src">Legal-adoption status only, no case/timeline data</td></tr>
+          <tr><td>NBS microdata / <a href="https://nigeria.opendataforafrica.org/ygmacic/crime-statistics" target="_blank" rel="noopener">OpenDataForAfrica crime statistics</a></td><td class="src">Free, structured, state-level, 389 time series</td><td class="src">Stale — last published 2014, covers 2007–2013</td></tr>
+          <tr><td><a href="https://data.unodc.org/" target="_blank" rel="noopener">UNODC Data Portal</a></td><td class="src">National crime/justice indicators via UN-CTS</td><td class="src">Annual, aggregate, lagged</td></tr>
+          <tr><td>CIMS (corrections.gov.ng)</td><td class="src">The real case-level, facility-by-facility data</td><td class="src"><span class="status-pill bad">Login-gated — MOU required, not open</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="prose" style="margin-top:16px; font-size:0.93rem;">The realistic Phase 1 MVP: a public transparency dashboard built on the NHRC/World Prison Brief/UNODC layer — real, free, recurring, national-trend-level. The case-level ACJA-timeline engine that flags a specific case at day 187 needs a formal data-sharing agreement with NCoS for CIMS access, the same route PPDC and the U.S. Embassy already used to get theirs — a partnership to negotiate, not data to scrape.</p>
   </section>
 
   <section id="challenges">
@@ -476,6 +497,13 @@
       <li><a href="https://www.ppdc.org/cacm/" target="_blank" rel="noopener">PPDC — Court Administration and Case Management Project</a></li>
       <li><a href="https://nji.gov.ng/" target="_blank" rel="noopener">National Judicial Institute, Nigeria</a></li>
       <li><a href="https://worldjusticeproject.org/rule-of-law-index/country/Nigeria" target="_blank" rel="noopener">WJP Rule of Law Index — Nigeria Insights</a></li>
+      <li><a href="https://www.nigeriarights.gov.ng/nhrc-media/data-and-infographics.html" target="_blank" rel="noopener">NHRC — Human Rights Situation Dashboard</a></li>
+      <li><a href="https://www.prisonstudies.org/country/nigeria" target="_blank" rel="noopener">World Prison Brief — Nigeria</a></li>
+      <li><a href="https://uwazi.io/en/entity/1a38jqvyp2z" target="_blank" rel="noopener">Uwazi — Nigeria Court Digitisation Project (CLEEN Foundation)</a></li>
+      <li><a href="https://nigeria.opendataforafrica.org/ygmacic/crime-statistics" target="_blank" rel="noopener">Nigeria Data Portal — Crime Statistics (OpenDataForAfrica)</a></li>
+      <li><a href="https://data.unodc.org/" target="_blank" rel="noopener">UNODC Data Portal</a></li>
+      <li><a href="https://ng.usembassy.gov/u-s-embassy-partners-with-correctional-information-management-systems-of-the-nigeria-correctional-service/" target="_blank" rel="noopener">U.S. Embassy Nigeria — CIMS partnership announcement</a></li>
+      <li><a href="https://prnigeria.com/2026/02/12/ncos-awaiting-trial-inmates/" target="_blank" rel="noopener">PRNigeria — NCoS awaiting-trial figures, Feb 2026</a></li>
     </ul>
     <div class="colophon">Compiled from open web sources current as of 24 August 2026. Statutory timelines and figures should be re-verified against primary legislation and the ACJMC's own records before use in a formal submission.</div>
   </footer>
