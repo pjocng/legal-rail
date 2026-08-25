@@ -167,6 +167,22 @@
   }
   .challenge-list li b{ color:var(--ink); font-weight:600; }
 
+  /* Step list — same bug-free pattern as challenge-list, accent color for "procedure" not "risk" */
+  .step-list{ list-style:none; margin:0; padding:0; display:grid; gap:16px; counter-reset:st; }
+  .step-list li{ counter-increment:st; position:relative; padding-left:36px; font-size:0.95rem; color:var(--ink-soft); }
+  .step-list li::before{
+    content:counter(st); font-family:"JetBrains Mono"; font-size:11px; font-weight:700; color:var(--accent);
+    border:1px solid var(--accent); border-radius:50%; width:23px; height:23px;
+    display:flex; align-items:center; justify-content:center; position:absolute; left:0; top:1px;
+  }
+  .step-list li b{ color:var(--ink); font-weight:600; }
+
+  .know-grid{ display:grid; gap:1px; background:var(--line); border:1px solid var(--line); margin-top:18px; }
+  .know{ background:var(--paper-raised); padding:16px 20px; display:grid; grid-template-columns:30px 1fr; gap:14px; }
+  .know .idx{ font-family:"JetBrains Mono"; font-size:11px; font-weight:700; color:var(--accent); border:1px solid var(--accent); border-radius:50%; width:26px; height:26px; display:flex; align-items:center; justify-content:center; }
+  .know h4{ font-size:0.98rem; margin-bottom:5px; }
+  .know p{ font-size:0.87rem; color:var(--ink-soft); margin:0; }
+
   .precedent-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
   .precedent{ background:var(--paper-raised); padding:18px 20px; }
   .precedent .country{ font-family:"JetBrains Mono"; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; }
@@ -212,6 +228,7 @@
         <li><a href="#challenges">07 Key challenges</a></li>
         <li><a href="#precedents">08 Precedents</a></li>
         <li><a href="#start">09 Where to start</a></li>
+        <li><a href="#buildplan">10 Building the MVP</a></li>
       </ul>
     </nav>
   </header>
@@ -466,6 +483,48 @@
     </div>
   </section>
 
+  <section id="buildplan">
+    <div class="section-head">
+      <span class="eyebrow">10 · Building the MVP</span>
+      <h2>What to know before writing code, and the steps to actually ship it</h2>
+      <p>The MVP in scope here is the honest one from Section 06: a public transparency dashboard on open, national-trend data — not the case-level compliance engine, which needs a CIMS data-sharing agreement first.</p>
+    </div>
+
+    <h3 style="font-family:'Source Serif 4'; font-size:1.15rem; margin-bottom:6px;">Knowledge required before you start</h3>
+    <div class="know-grid">
+      <div class="know"><span class="idx">1</span><div><h4>Primary statutory text, not secondary summaries</h4><p>Pull the actual ACJA 2015 gazette PDF and your first target state's ACJL (Lagos or FCT are most digitised). Law-firm blog summaries are fine for a research brief; a public dashboard citing a wrong section number loses credibility with the exact institutions — ACJMC, the judiciary — it needs to eventually win over.</p></div></div>
+      <div class="know"><span class="idx">2</span><div><h4>The real format of every data source</h4><p>Confirmed by fetching each one directly — see the table below. It varies enough that "build a scraper" is the wrong plan for half of them.</p></div></div>
+      <div class="know"><span class="idx">3</span><div><h4>An NDPA 2023 stance, decided in advance</h4><p>The MVP handles only aggregate, already-public statistics, so exposure is low — but write the methodology and privacy page now. Retrofitting it after Phase 2 adds case-level data is a much bigger job than doing it on day one.</p></div></div>
+      <div class="know"><span class="idx">4</span><div><h4>Who else is standing in this exact spot</h4><p>CLEEN Foundation, PPDC, and Partners West Africa Nigeria (the ACJL Tracker) are all already active here. A conversation with one of them before building may reveal the faster path is extending what they've built, not parallel infrastructure.</p></div></div>
+    </div>
+
+    <div class="table-scroll" style="margin-top:22px;">
+      <table>
+        <thead><tr><th>Source</th><th>Actual format, verified</th><th>Build implication</th></tr></thead>
+        <tbody>
+          <tr><td>World Prison Brief</td><td class="src">Genuine structured HTML tables, back to 1920</td><td class="src">Safe to scrape automatically</td></tr>
+          <tr><td>NHRC Dashboard</td><td class="src">Monthly PDF / image reports, not structured data</td><td class="src">Manual monthly data entry, not a scraper</td></tr>
+          <tr><td>UNODC Data Portal</td><td class="src">Structured, downloadable (format not yet verified in detail)</td><td class="src">Confirm export format before building against it</td></tr>
+          <tr><td>CLEEN's Uwazi tool</td><td class="src">Open-source platform (<a href="https://github.com/huridocs/uwazi" target="_blank" rel="noopener">huridocs/uwazi</a>), self-hostable, Node + ElasticSearch + MongoDB</td><td class="src">Reference architecture for later phases, not this MVP's data feed</td></tr>
+          <tr><td>NBS / OpenDataForAfrica</td><td class="src">Structured but ~2013-vintage</td><td class="src">Historical baseline chart only</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="font-family:'Source Serif 4'; font-size:1.15rem; margin:30px 0 6px;">The build steps</h3>
+    <ol class="step-list">
+      <li><b>Write a one-page spec.</b> Audience, the 4–6 metrics the dashboard will show, explicit out-of-scope (no case-level data yet), and the source plus verification method for each metric. Get one outside person to sanity-check it before building anything.</li>
+      <li><b>Pull primary sources.</b> The ACJA gazette text, the target state's ACJL, the last 3–4 NHRC PDFs. Define metrics from these, not from press paraphrase.</li>
+      <li><b>Build a mixed-mode pipeline, matching reality.</b> An automated scraper for World Prison Brief's structured table (a scheduled script is enough); a lightweight manual intake — literally a spreadsheet — for NHRC's monthly PDF. Store everything versioned in the same repo so the edit history is an audit trail.</li>
+      <li><b>Publish the compliance-methodology logic explicitly.</b> National pretrial rate vs. ACJA's implicit baseline, days since ACJMC's last public statement, an ECOWAS Court deadline countdown. Put the methodology on the page itself — that transparency is what makes this an accountability tool rather than noise.</li>
+      <li><b>Reuse this report's design system for the frontend</b> so the MVP reads as one coherent project rather than a bolt-on: same palette, type, and component patterns.</li>
+      <li><b>Put a "last verified" date and a direct source link on every number.</b> Non-negotiable given how much of this is PDFs, not APIs.</li>
+      <li><b>Decide who maintains it monthly before launch,</b> and what happens if that person is unavailable. The Open Treasury Portal's decline into "offline since December 2024" is the object lesson, not a hypothetical.</li>
+      <li><b>Soft-launch to CLEEN, PPDC, or Partners West Africa Nigeria first.</b> It catches errors and opens the door to the eventual ACJMC conversation.</li>
+      <li><b>Launch, then use the live MVP as leverage.</b> Approach NCoS/ACJMC about CIMS access for Phase 2 with a concrete artifact in hand: "here's what we already built with open data — here's what becomes possible with yours."</li>
+    </ol>
+  </section>
+
   <footer>
     <div class="section-head" style="margin-bottom:18px;"><span class="eyebrow">Sources</span></div>
     <ul class="sources">
@@ -504,6 +563,8 @@
       <li><a href="https://data.unodc.org/" target="_blank" rel="noopener">UNODC Data Portal</a></li>
       <li><a href="https://ng.usembassy.gov/u-s-embassy-partners-with-correctional-information-management-systems-of-the-nigeria-correctional-service/" target="_blank" rel="noopener">U.S. Embassy Nigeria — CIMS partnership announcement</a></li>
       <li><a href="https://prnigeria.com/2026/02/12/ncos-awaiting-trial-inmates/" target="_blank" rel="noopener">PRNigeria — NCoS awaiting-trial figures, Feb 2026</a></li>
+      <li><a href="https://github.com/huridocs/uwazi" target="_blank" rel="noopener">HURIDOCS — Uwazi (self-hosted open-source platform)</a></li>
+      <li><a href="https://uwazi.readthedocs.io/en/latest/admin-docs/introduction-to-uwazi.html" target="_blank" rel="noopener">Uwazi documentation — introduction &amp; self-hosting</a></li>
     </ul>
     <div class="colophon">Compiled from open web sources current as of 24 August 2026. Statutory timelines and figures should be re-verified against primary legislation and the ACJMC's own records before use in a formal submission.</div>
   </footer>
