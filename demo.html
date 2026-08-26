@@ -1,0 +1,240 @@
+<title>ACJMC Compliance Dashboard — Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper: #eef0ec;
+    --paper-raised: #f8f9f6;
+    --ink: #16202e;
+    --ink-soft: #4b5566;
+    --ink-faint: #838d9c;
+    --accent: #24406b;
+    --accent-deep: #16283f;
+    --accent-tint: #e2e8f1;
+    --line: #d4d6cd;
+    --line-soft: #e3e4dc;
+    --good: #2f7a4f;
+    --good-tint: #e3efe6;
+    --warn: #b8862f;
+    --warn-tint: #f4ecd9;
+    --bad: #a13a2f;
+    --bad-tint: #f5e3e0;
+    --focus: #24406b;
+    --shadow: 0 1px 2px rgba(22,32,46,0.06), 0 8px 22px rgba(22,32,46,0.06);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#10151d; --paper-raised:#171d27; --ink:#e8eaee; --ink-soft:#aab2c0; --ink-faint:#6e7686;
+      --accent:#86a8de; --accent-deep:#c3d4f0; --accent-tint:#1c2a3d; --line:#2a3140; --line-soft:#212734;
+      --good:#6cbf8f; --good-tint:#16281e; --warn:#dcae5f; --warn-tint:#2c2314; --bad:#e08476; --bad-tint:#2c1a17;
+      --focus:#86a8de; --shadow:0 1px 2px rgba(0,0,0,.35), 0 10px 26px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#10151d; --paper-raised:#171d27; --ink:#e8eaee; --ink-soft:#aab2c0; --ink-faint:#6e7686;
+    --accent:#86a8de; --accent-deep:#c3d4f0; --accent-tint:#1c2a3d; --line:#2a3140; --line-soft:#212734;
+    --good:#6cbf8f; --good-tint:#16281e; --warn:#dcae5f; --warn-tint:#2c2314; --bad:#e08476; --bad-tint:#2c1a17;
+    --focus:#86a8de; --shadow:0 1px 2px rgba(0,0,0,.35), 0 10px 26px rgba(0,0,0,.4);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"Public Sans", ui-sans-serif, system-ui, sans-serif; font-size:15px; line-height:1.5; }
+  a{ color:var(--accent); }
+  h1,h2,h3{ font-family:"Source Serif 4", Georgia, serif; font-weight:600; margin:0; color:var(--ink); }
+  .mono{ font-family:"JetBrains Mono", ui-monospace, monospace; font-variant-numeric:tabular-nums; }
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 22px 60px; }
+
+  /* Demo banner — unmissable, honest labeling */
+  .demo-banner{
+    background:var(--accent-deep); color:#fff; text-align:center; padding:8px 16px;
+    font-family:"JetBrains Mono"; font-size:11.5px; letter-spacing:.05em; text-transform:uppercase;
+  }
+  .demo-banner b{ color:var(--warn); }
+
+  /* Top bar */
+  .topbar{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px; padding:22px 0 18px; border-bottom:1px solid var(--line); }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand .mark{ width:34px; height:34px; border-radius:6px; background:var(--accent-deep); display:flex; align-items:center; justify-content:center; }
+  .brand .mark svg{ width:18px; height:18px; }
+  .brand h1{ font-size:1.25rem; }
+  .brand .sub{ font-family:"JetBrains Mono"; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin-top:2px; }
+  .top-meta{ display:flex; align-items:center; gap:14px; font-family:"JetBrains Mono"; font-size:11px; color:var(--ink-faint); }
+  .refresh-pill{ display:flex; align-items:center; gap:6px; padding:5px 10px; border:1px solid var(--line); border-radius:20px; background:var(--paper-raised); }
+  .refresh-pill i{ width:7px; height:7px; border-radius:50%; background:var(--good); display:inline-block; }
+
+  /* Section labels */
+  .panel-label{ font-family:"JetBrains Mono"; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:0 0 12px; display:flex; align-items:center; gap:8px; }
+  .panel-label .real{ color:var(--good); }
+  .panel-label .sample{ color:var(--warn); }
+
+  /* KPI row */
+  .kpi-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); margin:24px 0; }
+  .kpi{ background:var(--paper-raised); padding:18px 20px; }
+  .kpi .tag{ font-family:"JetBrains Mono"; font-size:9.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--good); margin-bottom:8px; display:flex; align-items:center; gap:5px; }
+  .kpi .tag i{ width:6px; height:6px; border-radius:50%; background:var(--good); display:inline-block; }
+  .kpi .n{ font-family:"JetBrains Mono"; font-size:1.9rem; font-weight:700; color:var(--ink); line-height:1; }
+  .kpi .n small{ font-size:0.95rem; color:var(--ink-soft); font-weight:500; }
+  .kpi .l{ font-size:12px; color:var(--ink-soft); margin-top:6px; }
+  .kpi .src{ font-family:"JetBrains Mono"; font-size:9.5px; color:var(--ink-faint); margin-top:8px; }
+  @media (max-width:820px){ .kpi-row{ grid-template-columns:repeat(2,1fr); } }
+
+  /* Two-column layout */
+  .grid-2{ display:grid; grid-template-columns:1.3fr 1fr; gap:20px; margin-bottom:22px; align-items:start; }
+  @media (max-width:900px){ .grid-2{ grid-template-columns:1fr; } }
+
+  .card{ background:var(--paper-raised); border:1px solid var(--line); box-shadow:var(--shadow); padding:20px 22px; }
+  .card h3{ font-size:1.02rem; margin-bottom:4px; }
+  .card .desc{ font-size:12.5px; color:var(--ink-soft); margin-bottom:16px; }
+
+  /* Trend chart */
+  .chart-svg{ width:100%; height:auto; display:block; }
+  .chart-foot{ display:flex; justify-content:space-between; margin-top:10px; font-family:"JetBrains Mono"; font-size:10.5px; color:var(--ink-faint); }
+
+  /* Source status list */
+  .src-list{ display:grid; gap:1px; background:var(--line); border:1px solid var(--line); }
+  .src-row{ background:var(--paper-raised); padding:13px 16px; display:grid; grid-template-columns:14px 1fr auto; gap:12px; align-items:center; }
+  .src-row .dot{ width:9px; height:9px; border-radius:50%; }
+  .src-row .dot.live{ background:var(--good); }
+  .src-row .dot.manual{ background:var(--accent); }
+  .src-row .dot.pending{ background:var(--warn); }
+  .src-row .name{ font-size:13px; font-weight:500; color:var(--ink); }
+  .src-row .cadence{ font-size:11px; color:var(--ink-faint); margin-top:2px; }
+  .src-row .status{ font-family:"JetBrains Mono"; font-size:10px; letter-spacing:.04em; text-transform:uppercase; padding:3px 8px; border-radius:3px; white-space:nowrap; }
+  .src-row .status.live{ background:var(--good-tint); color:var(--good); }
+  .src-row .status.manual{ background:var(--accent-tint); color:var(--accent); }
+  .src-row .status.pending{ background:var(--warn-tint); color:var(--warn); }
+
+  /* Sample-data wrapper — visually distinct so nobody mistakes it for real */
+  .sample-wrap{ position:relative; border:1.5px dashed var(--warn); background:repeating-linear-gradient(135deg, var(--warn-tint), var(--warn-tint) 10px, var(--paper-raised) 10px, var(--paper-raised) 20px); padding:2px; }
+  .sample-inner{ background:var(--paper-raised); padding:18px 20px; }
+  .sample-tag{ display:inline-flex; align-items:center; gap:6px; font-family:"JetBrains Mono"; font-size:10px; letter-spacing:.06em; text-transform:uppercase; color:var(--warn); background:var(--warn-tint); padding:4px 9px; border-radius:3px; margin-bottom:12px; }
+
+  table{ border-collapse:collapse; width:100%; font-size:12.5px; }
+  thead th{ text-align:left; font-family:"JetBrains Mono"; font-size:10px; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-soft); padding:8px 10px; border-bottom:1px solid var(--line); }
+  tbody td{ padding:9px 10px; border-bottom:1px solid var(--line-soft); vertical-align:middle; }
+  tbody tr:last-child td{ border-bottom:none; }
+  .flag{ font-family:"JetBrains Mono"; font-size:10px; letter-spacing:.03em; text-transform:uppercase; padding:3px 8px; border-radius:3px; white-space:nowrap; }
+  .flag.ok{ background:var(--good-tint); color:var(--good); }
+  .flag.warn{ background:var(--warn-tint); color:var(--warn); }
+  .flag.breach{ background:var(--bad-tint); color:var(--bad); }
+  .bar-cell{ display:flex; align-items:center; gap:8px; }
+  .mini-bar{ width:70px; height:5px; border-radius:3px; background:var(--line); overflow:hidden; flex:none; }
+  .mini-bar i{ display:block; height:100%; border-radius:3px; }
+
+  footer.demo-foot{ margin-top:30px; padding-top:18px; border-top:1px solid var(--line); font-family:"JetBrains Mono"; font-size:11px; color:var(--ink-faint); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+</style>
+
+<div class="demo-banner">▲ Prototype for demonstration — <b>national KPIs and trend are real, sourced figures</b>; state and case-level panels use <b>illustrative sample data</b> pending an NCoS data-sharing agreement</div>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">
+      <div class="mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M4 20h16M4 20V9l8-5 8 5v11M9 20v-6h6v6"/></svg>
+      </div>
+      <div>
+        <h1>Legal Rail</h1>
+        <div class="sub">ACJMC Compliance Dashboard</div>
+      </div>
+    </div>
+    <div class="top-meta">
+      <span class="refresh-pill"><i></i> Live sources connected: 1 of 3</span>
+      <span>Last verified <b class="mono" style="color:var(--ink-soft)">24 Aug 2026</b></span>
+    </div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi"><div class="tag"><i></i>World Prison Brief</div><div class="n">81,902</div><div class="l">Total in custody, nationwide</div><div class="src">Real · Jan 2026</div></div>
+    <div class="kpi"><div class="tag"><i></i>World Prison Brief</div><div class="n">65.2<small>%</small></div><div class="l">Awaiting trial, not convicted</div><div class="src">Real · Jan 2026</div></div>
+    <div class="kpi"><div class="tag"><i></i>World Prison Brief</div><div class="n">125.6<small>%</small></div><div class="l">Occupancy vs. official capacity (65,035)</div><div class="src">Real · Jan 2026</div></div>
+    <div class="kpi"><div class="tag" style="color:var(--warn)"><i style="background:var(--warn)"></i>ECOWAS Court</div><div class="n">6<small>mo.</small></div><div class="l">Compliance-report deadline issued, 2026</div><div class="src">Real · Court ruling</div></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Pretrial detention share, national</h3>
+      <div class="desc">Share of Nigeria's custodial population held awaiting trial rather than convicted, 2000–2025.</div>
+      <svg class="chart-svg" viewBox="0 0 640 220" role="img" aria-label="Line chart of Nigeria's pretrial detention share from 2000 to 2025, ranging between 62.9% and 74.0%, ending at 65.7% in 2025">
+        <line x1="40" y1="20" x2="40" y2="180" stroke="var(--line)" stroke-width="1"/>
+        <line x1="40" y1="180" x2="610" y2="180" stroke="var(--line)" stroke-width="1"/>
+        <g stroke="var(--line-soft)" stroke-width="1">
+          <line x1="40" y1="140" x2="610" y2="140"/><line x1="40" y1="100" x2="610" y2="100"/><line x1="40" y1="60" x2="610" y2="60"/>
+        </g>
+        <g font-family="JetBrains Mono" font-size="9.5" fill="var(--ink-faint)" text-anchor="end">
+          <text x="34" y="183">60%</text><text x="34" y="143">65%</text><text x="34" y="103">70%</text><text x="34" y="63">75%</text>
+        </g>
+        <!-- points: 2000:62.9 2005:74.0 2010:72.9 2015:69.3 2020:73.8 2025:65.7 -- mapped y = 180 - (v-60)*8 -->
+        <polyline points="60,175.2 172,68 284,76.8 396,105.6 508,70.4 600,141.6" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+        <g fill="var(--accent)">
+          <circle cx="60" cy="175.2" r="3.5"/><circle cx="172" cy="68" r="3.5"/><circle cx="284" cy="76.8" r="3.5"/>
+          <circle cx="396" cy="105.6" r="3.5"/><circle cx="508" cy="70.4" r="3.5"/>
+        </g>
+        <circle cx="600" cy="141.6" r="5" fill="var(--paper-raised)" stroke="var(--accent)" stroke-width="2.5"/>
+        <text x="600" y="128" text-anchor="end" font-family="JetBrains Mono" font-size="11" font-weight="700" fill="var(--accent)">65.7%</text>
+        <g font-family="JetBrains Mono" font-size="9.5" fill="var(--ink-faint)" text-anchor="middle">
+          <text x="60" y="198">2000</text><text x="172" y="198">2005</text><text x="284" y="198">2010</text>
+          <text x="396" y="198">2015</text><text x="508" y="198">2020</text><text x="600" y="198">2025</text>
+        </g>
+      </svg>
+      <div class="chart-foot"><span>Source: World Prison Brief, Institute for Crime &amp; Justice Policy Research</span><span class="mono" style="color:var(--good)">● live-sourced</span></div>
+    </div>
+
+    <div class="card">
+      <h3>Rail data sources</h3>
+      <div class="desc">What the dashboard already reads today, versus what a CIMS partnership unlocks.</div>
+      <div class="src-list">
+        <div class="src-row"><span class="dot live"></span><div><div class="name">World Prison Brief</div><div class="cadence">Auto-refreshed monthly</div></div><span class="status live">Live</span></div>
+        <div class="src-row"><span class="dot manual"></span><div><div class="name">NHRC Situation Dashboard</div><div class="cadence">Manual entry, monthly PDF</div></div><span class="status manual">Manual</span></div>
+        <div class="src-row"><span class="dot pending"></span><div><div class="name">CIMS — Corrections Info. Mgmt. System</div><div class="cadence">Facility &amp; case-level, real-time</div></div><span class="status pending">Pending MOU</span></div>
+        <div class="src-row"><span class="dot pending"></span><div><div class="name">State court case-management feeds</div><div class="cadence">LagosCoMiS, RIVCOMIS, NCMS</div></div><span class="status pending">Pending MOU</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-label"><span class="sample">◆ Illustrative sample data</span> — activates with a Nigerian Correctional Service data-sharing agreement</div>
+
+  <div class="grid-2">
+    <div class="sample-wrap">
+      <div class="sample-inner">
+        <span class="sample-tag">Sample data</span>
+        <h3 style="margin-bottom:4px;">State compliance snapshot</h3>
+        <div class="desc">Awaiting-trial population and statutory-timeline status, by state.</div>
+        <table>
+          <thead><tr><th>State</th><th>Awaiting trial</th><th>Median days held</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Lagos</td><td class="mono">4,210</td><td class="bar-cell"><span class="mono">142</span><span class="mini-bar"><i style="width:79%;background:var(--good)"></i></span></td><td><span class="flag ok">On track</span></td></tr>
+            <tr><td>Kano</td><td class="mono">3,860</td><td class="bar-cell"><span class="mono">198</span><span class="mini-bar"><i style="width:100%;background:var(--bad)"></i></span></td><td><span class="flag breach">Past 180d</span></td></tr>
+            <tr><td>Rivers</td><td class="mono">2,590</td><td class="bar-cell"><span class="mono">165</span><span class="mini-bar"><i style="width:92%;background:var(--warn)"></i></span></td><td><span class="flag warn">At risk</span></td></tr>
+            <tr><td>FCT</td><td class="mono">2,140</td><td class="bar-cell"><span class="mono">118</span><span class="mini-bar"><i style="width:66%;background:var(--good)"></i></span></td><td><span class="flag ok">On track</span></td></tr>
+            <tr><td>Kaduna</td><td class="mono">1,975</td><td class="bar-cell"><span class="mono">211</span><span class="mini-bar"><i style="width:100%;background:var(--bad)"></i></span></td><td><span class="flag breach">Past 180d</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sample-wrap">
+      <div class="sample-inner">
+        <span class="sample-tag">Sample data</span>
+        <h3 style="margin-bottom:4px;">Cases flagged for review</h3>
+        <div class="desc">Auto-flagged when time in custody exceeds the ACJA's 180-day statutory ceiling.</div>
+        <table>
+          <thead><tr><th>Ref.</th><th>State</th><th>Days held</th><th>Flag</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">CRN-…0231</td><td>Kano</td><td class="mono">243</td><td><span class="flag breach">63d over</span></td></tr>
+            <tr><td class="mono">CRN-…0188</td><td>Kaduna</td><td class="mono">227</td><td><span class="flag breach">47d over</span></td></tr>
+            <tr><td class="mono">CRN-…0402</td><td>Rivers</td><td class="mono">176</td><td><span class="flag warn">4d to limit</span></td></tr>
+            <tr><td class="mono">CRN-…0355</td><td>Ogun</td><td class="mono">169</td><td><span class="flag warn">11d to limit</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <footer class="demo-foot">
+    <span>Full research &amp; methodology: <a href="index.html">legal-rail report</a></span>
+    <span>National KPIs: World Prison Brief · State/case panels: illustrative, for demonstration only</span>
+  </footer>
+</div>
