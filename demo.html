@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>ACJMC Compliance Dashboard — Demo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -141,17 +142,18 @@
       </div>
     </div>
     <div class="top-meta">
-      <span class="refresh-pill"><i></i> Live sources connected: 1 of 3</span>
-      <span>Last verified <b class="mono" style="color:var(--ink-soft)">24 Aug 2026</b></span>
+      <span class="refresh-pill"><i></i> Live sources connected: <span id="liveSourceCount">1 of 3</span></span>
+      <span>Last verified <b class="mono" style="color:var(--ink-soft)" id="lastVerified">24 Aug 2026</b></span>
     </div>
   </div>
 
   <div class="kpi-row">
-    <div class="kpi"><div class="tag"><i></i>World Prison Brief</div><div class="n">81,902</div><div class="l">Total in custody, nationwide</div><div class="src">Real · Jan 2026</div></div>
-    <div class="kpi"><div class="tag"><i></i>World Prison Brief</div><div class="n">65.2<small>%</small></div><div class="l">Awaiting trial, not convicted</div><div class="src">Real · Jan 2026</div></div>
-    <div class="kpi"><div class="tag"><i></i>World Prison Brief</div><div class="n">125.6<small>%</small></div><div class="l">Occupancy vs. official capacity (65,035)</div><div class="src">Real · Jan 2026</div></div>
+    <div class="kpi"><div class="tag"><i></i>World Prison Brief</div><div class="n" id="kpi-total">81,902</div><div class="l">Total in custody, nationwide</div><div class="src" id="kpi-total-src">Real · Jan 2026</div></div>
+    <div class="kpi"><div class="tag"><i></i>World Prison Brief</div><div class="n" id="kpi-pretrial">65.2<small>%</small></div><div class="l">Awaiting trial, not convicted</div><div class="src" id="kpi-pretrial-src">Real · Jan 2026</div></div>
+    <div class="kpi"><div class="tag"><i></i>World Prison Brief</div><div class="n" id="kpi-occupancy">125.6<small>%</small></div><div class="l">Occupancy vs. official capacity (65,035)</div><div class="src" id="kpi-occupancy-src">Real · Jan 2026</div></div>
     <div class="kpi"><div class="tag" style="color:var(--warn)"><i style="background:var(--warn)"></i>ECOWAS Court</div><div class="n">6<small>mo.</small></div><div class="l">Compliance-report deadline issued, 2026</div><div class="src">Real · Court ruling</div></div>
   </div>
+  <div id="pipelineNote" class="mono" style="font-size:10.5px; color:var(--ink-faint); margin-top:6px;"></div>
 
   <div class="grid-2">
     <div class="card">
@@ -238,3 +240,60 @@
     <span>National KPIs: World Prison Brief · State/case panels: illustrative, for demonstration only</span>
   </footer>
 </div>
+
+<script>
+// Reads data/merged/summary.json -- the output of build.py -- and updates
+// the national KPI tiles with whatever the pipeline last produced. This is
+// the only script on the page: the state/case sample panels stay static
+// and clearly marked, since they aren't fed by any real source yet.
+// If the fetch fails (e.g. viewed as a bare local file, or before the
+// pipeline has ever run), the page silently keeps its last-committed
+// static values -- it never shows a broken or blank dashboard.
+(function () {
+  function fmt(n) {
+    return Math.round(n).toLocaleString('en-US');
+  }
+  function fmt1(n) {
+    return (Math.round(n * 10) / 10).toFixed(1);
+  }
+
+  fetch('data/merged/summary.json', { cache: 'no-store' })
+    .then(function (r) { if (!r.ok) throw new Error('no summary.json yet'); return r.json(); })
+    .then(function (data) {
+      var rows = data.rows || [];
+      function findNational(metricId) {
+        return rows.find(function (r) { return r.metric_id === metricId && r.scope === 'national'; });
+      }
+
+      var total = findNational('total_in_custody');
+      var pretrial = findNational('pretrial_detention_rate');
+      var occupancy = findNational('occupancy_rate');
+      var capacity = findNational('official_capacity');
+
+      if (total) {
+        document.getElementById('kpi-total').textContent = fmt(total.value);
+        document.getElementById('kpi-total-src').textContent = 'Real · ' + total.period;
+      }
+      if (pretrial) {
+        document.getElementById('kpi-pretrial').innerHTML = fmt1(pretrial.value) + '<small>%</small>';
+        document.getElementById('kpi-pretrial-src').textContent = 'Real · ' + pretrial.period;
+      }
+      if (occupancy) {
+        var capTxt = capacity ? ' (' + fmt(capacity.value) + ')' : '';
+        document.getElementById('kpi-occupancy').innerHTML = fmt1(occupancy.value) + '<small>%</small>';
+        document.getElementById('kpi-occupancy-src').textContent = 'Real · ' + occupancy.period;
+        document.querySelector('#kpi-occupancy').closest('.kpi').querySelector('.l').textContent =
+          'Occupancy vs. official capacity' + capTxt;
+      }
+
+      document.getElementById('liveSourceCount').textContent = data.live_sources + ' of ' + data.total_sources;
+      document.getElementById('lastVerified').textContent = data.generated_at || '—';
+      document.getElementById('pipelineNote').textContent =
+        '● fed live by build.py from data/sources/*.json — generated ' + (data.generated_at || 'unknown');
+    })
+    .catch(function () {
+      document.getElementById('pipelineNote').textContent =
+        '○ pipeline output not found — showing last-committed static values';
+    });
+})();
+</script>

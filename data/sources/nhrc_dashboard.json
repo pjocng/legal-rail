@@ -1,0 +1,20 @@
+[
+  {
+    "metric_id": "pretrial_detention_rate",
+    "label": "Pretrial detention share, national (NHRC/UNODC)",
+    "unit": "percent",
+    "scope": "national",
+    "state": null,
+    "facility": null,
+    "case_ref": null,
+    "value": 66.0,
+    "period": "2025-07",
+    "period_type": "monthly",
+    "source_id": "nhrc_dashboard",
+    "source_url": "https://www.unodc.org/conig/en/stories/pretrial-detention-drops-to-66-in-nigerias-custodial-centers--says-new-findings-from-unodc-and-national-human-rights-commission.html",
+    "fetched_at": "2026-08-24",
+    "confidence_tier": 2,
+    "verified_by": "manual:jamar-2026-08-24",
+    "notes": "Down from 70% in July 2024, per the joint NHRC/UNODC finding. This is an independent cross-check against the World Prison Brief figure -- a second source agreeing (both in the mid-60s%) is itself worth surfacing on the dashboard."
+  }
+]

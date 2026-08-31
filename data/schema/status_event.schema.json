@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "status_event.schema.json",
+  "title": "StatusEvent",
+  "description": "One status push from one institution against one CRN — the literal 'pushes status' arrow in the rail diagram. Empty until institutions actually write to the rail; defined now so the shape is ready.",
+  "type": "object",
+  "required": ["crn", "institution_id", "event_type", "event_date", "source_id"],
+  "properties": {
+    "crn": { "type": "string" },
+    "institution_id": { "type": "string", "description": "e.g. 'npf', 'fmoj_dpp', 'judiciary', 'ncos'." },
+    "event_type": { "type": "string", "enum": ["charged", "arraigned", "adjourned", "remanded", "convicted", "released", "appealed"] },
+    "event_date": { "type": "string", "format": "date" },
+    "source_id": { "type": "string" },
+    "confidence_tier": { "type": "integer", "enum": [1, 2, 3, 4] },
+    "notes": { "type": ["string", "null"] }
+  },
+  "additionalProperties": false
+}

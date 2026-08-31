@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "source.schema.json",
+  "title": "Source",
+  "description": "The participant registry for data sources — mirrors the 'participant registry' component of the rail architecture itself, just for data feeds instead of institutions writing case status.",
+  "type": "object",
+  "required": ["id", "name", "type", "access", "cadence", "status"],
+  "properties": {
+    "id": { "type": "string", "description": "Matches source_id on observations." },
+    "name": { "type": "string" },
+    "url": { "type": ["string", "null"] },
+    "type": { "type": "string", "enum": ["scraper", "manual", "api", "mock"] },
+    "access": { "type": "string", "enum": ["open", "gated_pending_mou", "test_fixture"] },
+    "cadence": { "type": "string", "enum": ["monthly", "quarterly", "annual", "irregular", "n/a"] },
+    "owner_institution": { "type": ["string", "null"], "description": "Who publishes this in the real world, e.g. 'Institute for Crime & Justice Policy Research', 'NHRC', 'NCoS'." },
+    "status": { "type": "string", "enum": ["active", "pending", "deprecated"] },
+    "notes": { "type": ["string", "null"] }
+  },
+  "additionalProperties": false
+}

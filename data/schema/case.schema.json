@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "case.schema.json",
+  "title": "Case",
+  "description": "The Phase 2/3 target shape — one row per case, carried by its Case Reference Number (CRN) across every institution. Empty (data/cases/cases.json is []) until a CIMS/NCoS or state-court data-sharing agreement exists; the schema is defined now so Phase 1 doesn't have to be rebuilt to receive it.",
+  "type": "object",
+  "required": ["crn", "state", "status", "statutory_limit_days"],
+  "properties": {
+    "crn": { "type": "string", "pattern": "^CRN-[0-9]{4}-[0-9]{6}$" },
+    "state": { "type": "string" },
+    "facility": { "type": ["string", "null"] },
+    "charge_date": { "type": ["string", "null"], "format": "date" },
+    "arraignment_date": { "type": ["string", "null"], "format": "date" },
+    "current_institution": { "type": ["string", "null"], "enum": ["police", "dpp", "court", "corrections", "appeal", null] },
+    "status": { "type": "string", "enum": ["charged", "arraigned", "in_trial", "remanded", "convicted", "released", "appealed", "unknown"] },
+    "days_in_custody": { "type": ["integer", "null"] },
+    "statutory_limit_days": { "type": "integer", "default": 180, "description": "ACJA's 180-day ceiling; state ACJLs may set a different number." },
+    "flag": { "type": ["string", "null"], "enum": ["on_track", "at_risk", "breach", null] },
+    "source_id": { "type": ["string", "null"] },
+    "confidence_tier": { "type": "integer", "enum": [1, 2, 3, 4] }
+  },
+  "additionalProperties": false
+}

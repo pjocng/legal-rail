@@ -1,0 +1,55 @@
+name: Update Legal Rail data
+
+# Runs the World Prison Brief adapter monthly (it publishes on that cadence),
+# rebuilds the merged/summary files, and opens a pull request if anything
+# changed. It deliberately does NOT auto-merge -- a human reviews every
+# data change before it reaches the live dashboard. Can also be triggered
+# manually from the Actions tab to test the pipeline on demand.
+
+on:
+  schedule:
+    - cron: "0 6 1 * *" # 06:00 UTC on the 1st of every month
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run World Prison Brief adapter
+        run: python adapters/world_prison_brief.py
+
+      - name: Validate all sources
+        run: python adapters/validate.py
+
+      - name: Rebuild merged data
+        run: python build.py
+
+      - name: Open a pull request if data changed
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "Automated data refresh: World Prison Brief"
+          title: "Automated data refresh: World Prison Brief"
+          body: |
+            Scheduled monthly run of `adapters/world_prison_brief.py` plus a
+            rebuild via `build.py`. This PR is opened automatically but **not**
+            auto-merged -- review the diff in `data/sources/world_prison_brief.json`
+            and `data/merged/` before merging, per the pipeline's confidence-tier
+            design (see `MVP_README.md`).
+          branch: automated/data-refresh
+          delete-branch: true
+          labels: automated-data-refresh

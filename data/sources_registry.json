@@ -1,0 +1,57 @@
+[
+  {
+    "id": "world_prison_brief",
+    "name": "World Prison Brief",
+    "url": "https://www.prisonstudies.org/country/nigeria",
+    "type": "scraper",
+    "access": "open",
+    "cadence": "monthly",
+    "owner_institution": "Institute for Crime & Justice Policy Research",
+    "status": "active",
+    "notes": "Structured HTML table, confirmed scrapeable. National-level only."
+  },
+  {
+    "id": "nhrc_dashboard",
+    "name": "NHRC Human Rights Situation Dashboard",
+    "url": "https://www.nigeriarights.gov.ng/nhrc-media/data-and-infographics.html",
+    "type": "manual",
+    "access": "open",
+    "cadence": "monthly",
+    "owner_institution": "National Human Rights Commission",
+    "status": "active",
+    "notes": "Published as PDF/image reports, not structured data — requires manual entry each month, not a scraper."
+  },
+  {
+    "id": "cims_ncos",
+    "name": "CIMS — Corrections Information Management System",
+    "url": "https://www.corrections.gov.ng/statistics",
+    "type": "api",
+    "access": "gated_pending_mou",
+    "cadence": "n/a",
+    "owner_institution": "Nigerian Correctional Service",
+    "status": "pending",
+    "notes": "Confirmed login-gated (state selector + officer service number + password) as of Aug 2026. Real case-level, facility-by-facility data lives here. Activates on a data-sharing agreement — the same route PPDC and the U.S. Embassy already used."
+  },
+  {
+    "id": "state_court_feeds",
+    "name": "State court case-management systems (LagosCoMiS, RIVCOMIS, NCMS)",
+    "url": null,
+    "type": "api",
+    "access": "gated_pending_mou",
+    "cadence": "n/a",
+    "owner_institution": "State judiciaries / NJI",
+    "status": "pending",
+    "notes": "Phase 2 target — bridging these behind the shared Case Reference Number is the pilot described in the roadmap."
+  },
+  {
+    "id": "test_mock_state_feed",
+    "name": "[TEST FIXTURE] Mock state-level feed",
+    "url": null,
+    "type": "mock",
+    "access": "test_fixture",
+    "cadence": "n/a",
+    "owner_institution": null,
+    "status": "active",
+    "notes": "Not a real source. Exists to prove the pipeline correctly ingests state-scoped, differently-shaped data without changing the schema or the build script — a rehearsal for what CIMS onboarding will actually require."
+  }
+]

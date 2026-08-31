@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "observation.schema.json",
+  "title": "Observation",
+  "description": "One data point in the Legal Rail's normalized store. Every metric — whether a national trend from World Prison Brief, a monthly NHRC figure, or (eventually) a state-level count from CIMS — is expressed as one of these. The dashboard reads only from this shape; it never talks to a source directly.",
+  "type": "object",
+  "required": ["metric_id", "label", "unit", "scope", "value", "period", "period_type", "source_id", "fetched_at", "confidence_tier"],
+  "properties": {
+    "metric_id": { "type": "string", "description": "Stable machine key, e.g. 'pretrial_detention_rate', 'total_in_custody'." },
+    "label": { "type": "string", "description": "Human-readable name for display." },
+    "unit": { "type": "string", "enum": ["percent", "count", "days", "ratio"] },
+    "scope": { "type": "string", "enum": ["national", "state", "facility", "case"], "description": "What level this observation describes. CIMS-derived data will mostly be 'state' or 'facility' or 'case'; today's sources are all 'national'." },
+    "state": { "type": ["string", "null"], "description": "Nigerian state name. Null unless scope is 'state', 'facility', or 'case'." },
+    "facility": { "type": ["string", "null"], "description": "Custodial facility name. Null unless scope is 'facility' or 'case'." },
+    "case_ref": { "type": ["string", "null"], "description": "Case Reference Number (CRN), once the rail's identifier exists. Null unless scope is 'case'." },
+    "value": { "type": "number" },
+    "period": { "type": "string", "description": "e.g. '2025', '2026-05', '2026-05-24' — matches period_type's grain." },
+    "period_type": { "type": "string", "enum": ["annual", "monthly", "point_in_time"] },
+    "source_id": { "type": "string", "description": "Foreign key into sources.json — which adapter/institution produced this." },
+    "source_url": { "type": ["string", "null"] },
+    "fetched_at": { "type": "string", "format": "date", "description": "When this observation was pulled or entered, not when it was published." },
+    "confidence_tier": {
+      "type": "integer",
+      "enum": [1, 2, 3, 4],
+      "description": "1 = live/automated & sourced & national. 2 = manual entry & sourced. 3 = modeled/estimated. 4 = illustrative/sample only — must never silently promote to a lower number."
+    },
+    "verified_by": { "type": ["string", "null"], "description": "'scraper:world_prison_brief', 'manual:<name>', or null." },
+    "notes": { "type": ["string", "null"] }
+  },
+  "additionalProperties": false
+}
