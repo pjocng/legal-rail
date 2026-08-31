@@ -1,0 +1,292 @@
+<meta charset="utf-8">
+<title>Legal Rail — Pipeline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=Public+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --paper: #eef0ec;
+    --paper-raised: #f8f9f6;
+    --ink: #16202e;
+    --ink-soft: #4b5566;
+    --ink-faint: #838d9c;
+    --accent: #24406b;
+    --accent-deep: #16283f;
+    --accent-tint: #e2e8f1;
+    --line: #d4d6cd;
+    --line-soft: #e3e4dc;
+    --good: #2f7a4f;
+    --good-tint: #e3efe6;
+    --warn: #b8862f;
+    --warn-tint: #f4ecd9;
+    --bad: #a13a2f;
+    --bad-tint: #f5e3e0;
+    --focus: #24406b;
+    --shadow: 0 1px 2px rgba(22,32,46,0.06), 0 8px 22px rgba(22,32,46,0.06);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#10151d; --paper-raised:#171d27; --ink:#e8eaee; --ink-soft:#aab2c0; --ink-faint:#6e7686;
+      --accent:#86a8de; --accent-deep:#c3d4f0; --accent-tint:#1c2a3d; --line:#2a3140; --line-soft:#212734;
+      --good:#6cbf8f; --good-tint:#16281e; --warn:#dcae5f; --warn-tint:#2c2314; --bad:#e08476; --bad-tint:#2c1a17;
+      --focus:#86a8de; --shadow:0 1px 2px rgba(0,0,0,.35), 0 10px 26px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#10151d; --paper-raised:#171d27; --ink:#e8eaee; --ink-soft:#aab2c0; --ink-faint:#6e7686;
+    --accent:#86a8de; --accent-deep:#c3d4f0; --accent-tint:#1c2a3d; --line:#2a3140; --line-soft:#212734;
+    --good:#6cbf8f; --good-tint:#16281e; --warn:#dcae5f; --warn-tint:#2c2314; --bad:#e08476; --bad-tint:#2c1a17;
+    --focus:#86a8de; --shadow:0 1px 2px rgba(0,0,0,.35), 0 10px 26px rgba(0,0,0,.4);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"Public Sans", ui-sans-serif, system-ui, sans-serif; font-size:15px; line-height:1.55; }
+  a{ color:var(--accent); }
+  h1,h2,h3{ font-family:"Source Serif 4", Georgia, serif; font-weight:600; margin:0; color:var(--ink); }
+  .mono{ font-family:"JetBrains Mono", ui-monospace, monospace; font-variant-numeric:tabular-nums; }
+  .wrap{ max-width:1080px; margin:0 auto; padding:0 22px 60px; }
+
+  header.top{ padding:26px 0 20px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:14px; }
+  .kicker{ font-family:"JetBrains Mono"; font-size:11px; letter-spacing:.09em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .kicker .dot{ width:6px; height:6px; border-radius:50%; background:var(--accent); }
+  h1{ font-size:1.7rem; }
+  .top-links{ display:flex; gap:16px; font-family:"JetBrains Mono"; font-size:11.5px; }
+  .top-links a{ color:var(--ink-soft); }
+  .top-links a:hover{ color:var(--accent); }
+
+  section{ padding:34px 0; border-bottom:1px solid var(--line); }
+  section:last-of-type{ border-bottom:none; }
+  .section-head{ margin-bottom:18px; max-width:70ch; }
+  .section-head .eyebrow{ font-family:"JetBrains Mono"; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); margin-bottom:8px; display:block; }
+  .section-head h2{ font-size:1.3rem; }
+  .section-head p{ margin-top:8px; color:var(--ink-soft); font-size:0.92rem; }
+
+  /* status strip */
+  .status-strip{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); margin-top:6px; }
+  .stat{ background:var(--paper-raised); padding:14px 16px; }
+  .stat .n{ font-family:"JetBrains Mono"; font-size:1.35rem; font-weight:700; color:var(--accent); }
+  .stat .l{ font-size:10.5px; color:var(--ink-soft); margin-top:3px; text-transform:uppercase; letter-spacing:.03em; }
+  @media (max-width:700px){ .status-strip{ grid-template-columns:repeat(2,1fr); } }
+
+  /* flow diagram */
+  figure.diagram{ margin:0; border:1px solid var(--line); background:var(--paper-raised); padding:18px; }
+  figure.diagram svg{ width:100%; height:auto; display:block; color:var(--ink); }
+  figure.diagram figcaption{ font-size:11px; color:var(--ink-faint); margin-top:10px; font-family:"JetBrains Mono"; }
+
+  .table-scroll{ overflow-x:auto; border:1px solid var(--line); background:var(--paper-raised); }
+  table{ border-collapse:collapse; width:100%; min-width:560px; font-size:0.88rem; }
+  thead th{ text-align:left; font-family:"JetBrains Mono"; font-size:10px; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-soft); padding:9px 12px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  tbody td{ padding:9px 12px; border-bottom:1px solid var(--line-soft); vertical-align:middle; }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.mono-cell{ font-family:"JetBrains Mono"; font-size:0.85em; }
+
+  .pill{ font-family:"JetBrains Mono"; font-size:10px; letter-spacing:.04em; text-transform:uppercase; padding:3px 8px; border-radius:3px; white-space:nowrap; display:inline-block; }
+  .pill.good{ background:var(--good-tint); color:var(--good); }
+  .pill.warn{ background:var(--warn-tint); color:var(--warn); }
+  .pill.bad{ background:var(--bad-tint); color:var(--bad); }
+  .pill.neutral{ background:var(--accent-tint); color:var(--accent); }
+
+  /* confidence tier legend */
+  .tier-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
+  .tier{ background:var(--paper-raised); padding:14px 16px; }
+  .tier .num{ font-family:"JetBrains Mono"; font-size:11px; font-weight:700; margin-bottom:6px; }
+  .tier .desc{ font-size:11.5px; color:var(--ink-soft); line-height:1.35; }
+  .tier.t1 .num{ color:var(--good); } .tier.t2 .num{ color:var(--accent); }
+  .tier.t3 .num{ color:var(--warn); } .tier.t4 .num{ color:var(--bad); }
+  @media (max-width:700px){ .tier-grid{ grid-template-columns:repeat(2,1fr); } }
+
+  #loadError{ display:none; background:var(--bad-tint); border:1px solid var(--bad); color:var(--bad); padding:12px 16px; font-size:12.5px; font-family:"JetBrains Mono"; margin-top:14px; }
+
+  footer.foot{ padding:30px 0 50px; font-family:"JetBrains Mono"; font-size:11px; color:var(--ink-faint); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="kicker"><span class="dot"></span> PHASE 1 · LIVE</div>
+      <h1>The Legal Rail — Pipeline</h1>
+    </div>
+    <div class="top-links">
+      <a href="index.html">Research brief</a>
+      <a href="demo.html">Dashboard</a>
+      <a href="https://github.com/pjocng/legal-rail" target="_blank" rel="noopener">Source code ↗</a>
+    </div>
+  </header>
+
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">What this page is</span>
+      <h2>How the dashboard's numbers actually get there</h2>
+      <p>The dashboard is the output. This is everything underneath it — read live, right now, from the same files that feed it. Nothing on this page is hand-typed; if a number below is wrong, the pipeline itself is wrong, not this page.</p>
+    </div>
+    <div class="status-strip" id="statusStrip">
+      <div class="stat"><div class="n" id="statLive">—</div><div class="l">Live sources</div></div>
+      <div class="stat"><div class="n" id="statPending">—</div><div class="l">Pending MOU</div></div>
+      <div class="stat"><div class="n" id="statObs">—</div><div class="l">Observations stored</div></div>
+      <div class="stat"><div class="n" id="statGenerated">—</div><div class="l">Last built</div></div>
+    </div>
+    <div id="loadError">Could not load pipeline data from this page's origin — this page needs to be served over http(s), not opened as a bare local file. It works correctly on the live GitHub Pages site.</div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">Architecture</span>
+      <h2>Sources → build → dashboard</h2>
+      <p>Every adapter outputs the same shape. Adding a new source later means writing one new adapter file — nothing else in this diagram changes.</p>
+    </div>
+    <figure class="diagram">
+      <svg viewBox="0 0 900 220" role="img" aria-label="Pipeline flow: World Prison Brief, NHRC, and pending CIMS and state court feeds each write to data sources; build.py validates and merges them into summary.json; demo.html fetches summary.json to render the dashboard.">
+        <g font-family="Public Sans" font-size="11.5">
+          <g transform="translate(20,20)">
+            <rect x="0" y="0" width="150" height="42" rx="3" fill="none" stroke="var(--good)"/>
+            <text x="75" y="26" text-anchor="middle" fill="currentColor">World Prison Brief</text>
+          </g>
+          <g transform="translate(20,72)">
+            <rect x="0" y="0" width="150" height="42" rx="3" fill="none" stroke="var(--accent)"/>
+            <text x="75" y="26" text-anchor="middle" fill="currentColor">NHRC (manual)</text>
+          </g>
+          <g transform="translate(20,124)">
+            <rect x="0" y="0" width="150" height="42" rx="3" fill="none" stroke="var(--warn)" stroke-dasharray="4 3"/>
+            <text x="75" y="26" text-anchor="middle" fill="var(--warn)">CIMS — pending MOU</text>
+          </g>
+          <g transform="translate(20,176)">
+            <rect x="0" y="0" width="150" height="42" rx="3" fill="none" stroke="var(--warn)" stroke-dasharray="4 3"/>
+            <text x="75" y="26" text-anchor="middle" fill="var(--warn)">State courts — pending</text>
+          </g>
+        </g>
+        <g stroke="currentColor" stroke-width="1" opacity="0.5">
+          <line x1="170" y1="41" x2="260" y2="107"/>
+          <line x1="170" y1="93" x2="260" y2="107"/>
+          <line x1="170" y1="145" x2="260" y2="107"/>
+          <line x1="170" y1="197" x2="260" y2="107"/>
+        </g>
+        <g transform="translate(260,80)">
+          <rect x="0" y="0" width="160" height="54" rx="3" fill="var(--accent-deep)" stroke="var(--accent-deep)"/>
+          <text x="80" y="24" text-anchor="middle" fill="white" font-family="JetBrains Mono" font-size="11" font-weight="700">build.py</text>
+          <text x="80" y="40" text-anchor="middle" fill="#B9C4D6" font-family="Public Sans" font-size="9.5">validate + merge</text>
+        </g>
+        <line x1="420" y1="107" x2="490" y2="107" stroke="currentColor" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="currentColor"/>
+          </marker>
+        </defs>
+        <g transform="translate(490,80)">
+          <rect x="0" y="0" width="150" height="54" rx="3" fill="none" stroke="currentColor"/>
+          <text x="75" y="24" text-anchor="middle" fill="currentColor" font-family="JetBrains Mono" font-size="10.5">summary.json</text>
+          <text x="75" y="40" text-anchor="middle" fill="var(--ink-faint)" font-family="Public Sans" font-size="9">confidence-ranked</text>
+        </g>
+        <line x1="640" y1="107" x2="710" y2="107" stroke="currentColor" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <g transform="translate(710,72)">
+          <rect x="0" y="0" width="170" height="70" rx="3" fill="var(--good-tint)" stroke="var(--good)"/>
+          <text x="85" y="30" text-anchor="middle" fill="var(--good)" font-weight="700">demo.html</text>
+          <text x="85" y="48" text-anchor="middle" fill="var(--good)" font-family="Public Sans" font-size="9.5">fetches this page live</text>
+        </g>
+      </svg>
+      <figcaption>Solid border = writing live data today. Dashed = registered, schema-ready, waiting on a data-sharing agreement.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">Source registry</span>
+      <h2>Every data source, real status</h2>
+      <p>Read live from <code class="mono">data/sources_registry.json</code> — the same file <code class="mono">build.py</code> validates every source against.</p>
+    </div>
+    <div class="table-scroll">
+      <table id="sourcesTable">
+        <thead><tr><th>Source</th><th>Type</th><th>Cadence</th><th>Owner</th><th>Status</th></tr></thead>
+        <tbody id="sourcesBody"><tr><td colspan="5" style="color:var(--ink-faint)">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">Confidence tiers</span>
+      <h2>How the dashboard decides which number to trust</h2>
+      <p>Every observation carries one of these, as data, not as a caption. <code class="mono">build.py</code> always prefers a better tier over a worse one for the same metric.</p>
+    </div>
+    <div class="tier-grid">
+      <div class="tier t1"><div class="num">TIER 1</div><div class="desc">Live/automated, sourced, national</div></div>
+      <div class="tier t2"><div class="num">TIER 2</div><div class="desc">Manual entry, sourced</div></div>
+      <div class="tier t3"><div class="num">TIER 3</div><div class="desc">Modeled / estimated</div></div>
+      <div class="tier t4"><div class="num">TIER 4</div><div class="desc">Illustrative / sample only</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">Live output</span>
+      <h2>What build.py produced, right now</h2>
+      <p>Every row in the dashboard's merged data store — this is the actual, current contents of <code class="mono">data/merged/summary.json</code>.</p>
+    </div>
+    <div class="table-scroll">
+      <table id="summaryTable">
+        <thead><tr><th>Metric</th><th>Scope</th><th>State</th><th>Value</th><th>Period</th><th>Tier</th><th>Flag</th></tr></thead>
+        <tbody id="summaryBody"><tr><td colspan="7" style="color:var(--ink-faint)">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span>Automated refresh: monthly, via GitHub Actions — opens a PR, never auto-merges. <a href="https://github.com/pjocng/legal-rail/actions" target="_blank" rel="noopener">View runs ↗</a></span>
+    <span>Full architecture notes: <a href="https://github.com/pjocng/legal-rail/blob/main/MVP_README.md" target="_blank" rel="noopener">MVP_README.md ↗</a></span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  function pillFor(access, status) {
+    if (access === 'open' && status === 'active') return '<span class="pill good">Live</span>';
+    if (access === 'gated_pending_mou') return '<span class="pill warn">Pending MOU</span>';
+    if (access === 'test_fixture') return '<span class="pill neutral">Test fixture</span>';
+    return '<span class="pill neutral">' + status + '</span>';
+  }
+  function tierPill(tier) {
+    var cls = tier === 1 ? 'good' : tier === 2 ? 'neutral' : tier === 3 ? 'warn' : 'bad';
+    return '<span class="pill ' + cls + '">Tier ' + tier + '</span>';
+  }
+  function flagPill(flag) {
+    if (!flag) return '<span style="color:var(--ink-faint)">—</span>';
+    var cls = flag === 'breach' ? 'bad' : flag === 'at_risk' ? 'warn' : 'good';
+    return '<span class="pill ' + cls + '">' + flag.replace('_', ' ') + '</span>';
+  }
+  function fmtVal(v, unit) {
+    var n = Math.round(v * 10) / 10;
+    var s = n.toLocaleString('en-US');
+    return unit === 'percent' ? s + '%' : unit === 'days' ? s + 'd' : s;
+  }
+
+  Promise.all([
+    fetch('data/sources_registry.json', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw new Error('registry'); return r.json(); }),
+    fetch('data/merged/summary.json', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw new Error('summary'); return r.json(); }),
+    fetch('data/merged/observations.json', { cache: 'no-store' }).then(function (r) { if (!r.ok) throw new Error('observations'); return r.json(); })
+  ]).then(function (results) {
+    var registry = results[0], summary = results[1], observations = results[2];
+
+    document.getElementById('statLive').textContent = summary.live_sources;
+    document.getElementById('statPending').textContent = summary.pending_sources;
+    document.getElementById('statObs').textContent = observations.length;
+    document.getElementById('statGenerated').textContent = summary.generated_at || '—';
+
+    var srcRows = registry.map(function (s) {
+      return '<tr><td><b>' + s.name + '</b></td><td class="mono-cell">' + s.type + '</td><td>' + s.cadence + '</td>' +
+        '<td>' + (s.owner_institution || '—') + '</td><td>' + pillFor(s.access, s.status) + '</td></tr>';
+    }).join('');
+    document.getElementById('sourcesBody').innerHTML = srcRows;
+
+    var sumRows = summary.rows.map(function (r) {
+      return '<tr><td>' + r.label + '</td><td class="mono-cell">' + r.scope + '</td><td>' + (r.state || '—') + '</td>' +
+        '<td class="mono-cell">' + fmtVal(r.value, r.unit) + '</td><td class="mono-cell">' + r.period + '</td>' +
+        '<td>' + tierPill(r.confidence_tier) + '</td><td>' + flagPill(r.derived_flag) + '</td></tr>';
+    }).join('');
+    document.getElementById('summaryBody').innerHTML = sumRows;
+  }).catch(function (err) {
+    document.getElementById('loadError').style.display = 'block';
+    console.error(err);
+  });
+})();
+</script>
