@@ -88,6 +88,21 @@
   .meta-row{ margin-top:22px; display:flex; flex-wrap:wrap; gap:8px 22px; font-family:"JetBrains Mono"; font-size:11.5px; color:var(--ink-faint); }
   .meta-row b{ color:var(--ink-soft); font-weight:600; }
 
+  .cta-row{ margin-top:24px; display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+  .cta-demo{
+    display:inline-flex; align-items:center; gap:10px;
+    background:#2f7a4f; color:#ffffff; text-decoration:none;
+    font-family:"Public Sans", sans-serif; font-weight:600; font-size:1rem;
+    padding:13px 24px; border-radius:5px; transition:background .12s, transform .12s;
+    box-shadow:0 1px 2px rgba(22,32,46,0.12), 0 6px 18px rgba(47,122,79,0.22);
+  }
+  .cta-demo:hover{ background:#276a43; transform:translateY(-1px); }
+  .cta-demo:focus-visible{ outline:2px solid #2f7a4f; outline-offset:3px; }
+  .cta-demo .arw{ font-size:1.15em; line-height:1; }
+  .cta-secondary{ font-family:"JetBrains Mono"; font-size:12px; color:var(--ink-soft); text-decoration:none; }
+  .cta-secondary:hover{ color:var(--accent); }
+  @media (prefers-reduced-motion: reduce){ .cta-demo{ transition:none; } .cta-demo:hover{ transform:none; } }
+
   .stat-strip{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); margin:28px 0 0; }
   .stat{ background:var(--paper-raised); padding:16px 16px 14px; }
   .stat .n{ font-family:"JetBrains Mono"; font-size:clamp(1.25rem,2.4vw,1.6rem); font-weight:700; color:var(--accent); }
@@ -207,6 +222,10 @@
     <div class="kicker"><span class="dot"></span> RESEARCH BRIEF &nbsp;·&nbsp; JUSTICE-SECTOR INFRASTRUCTURE &nbsp;·&nbsp; NIGERIA</div>
     <h1>The Legal Rail</h1>
     <p class="dek">What NIBSS did for money moving between banks, this proposes for a case moving between police, prosecution, courts, and corrections — a shared interoperability layer under Nigeria's existing justice institutions, not a new court system on top of them.</p>
+    <div class="cta-row">
+      <a class="cta-demo" href="demo.html">Open the live dashboard demo <span class="arw" aria-hidden="true">&rarr;</span></a>
+      <a class="cta-secondary" href="pipeline.html">or see the data pipeline behind it &rarr;</a>
+    </div>
     <div class="meta-row">
       <span><b>Prepared</b> 24 August 2026</span>
       <span><b>Scope</b> Federal &amp; state criminal justice infrastructure</span>
