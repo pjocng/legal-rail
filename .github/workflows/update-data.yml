@@ -1,10 +1,14 @@
 name: Update Legal Rail data
 
-# Runs the World Prison Brief adapter monthly (it publishes on that cadence),
-# rebuilds the merged/summary files, and opens a pull request if anything
-# changed. It deliberately does NOT auto-merge -- a human reviews every
-# data change before it reaches the live dashboard. Can also be triggered
-# manually from the Actions tab to test the pipeline on demand.
+# Runs the World Prison Brief adapter monthly (it publishes on that cadence)
+# and rebuilds the merged/summary files. The adapter only rewrites its data
+# file when a figure actually moved, so a month with no change produces no
+# diff and no PR -- just a silent green run. When something does move, this
+# opens a pull request and never auto-merges: a human reviews the change
+# first. Can also be triggered manually from the Actions tab.
+#
+# Requires the repo setting: Settings -> Actions -> General -> Workflow
+# permissions -> "Allow GitHub Actions to create and approve pull requests".
 
 on:
   schedule:

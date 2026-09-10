@@ -58,10 +58,19 @@ data/sources/*.json  →  build.py  →  data/merged/summary.json  →  demo.htm
     `demo.html` reads.
 
 - **`.github/workflows/update-data.yml`** — runs the World Prison Brief
-  scraper monthly (matching its own publishing cadence) and **opens a pull
-  request, never auto-merges**. A human reviews every data change before
-  it reaches the live dashboard — the QA checkpoint the pipeline needs
-  without a full-time maintainer watching it.
+  scraper monthly (matching its own publishing cadence). The adapter only
+  rewrites its data file when a figure actually moved, so a month where
+  nothing changed produces **no diff and no pull request** — a silent,
+  green "checked, nothing moved" run. When a figure *does* move, the
+  workflow **opens a pull request and never auto-merges**: a human reviews
+  the change before it reaches the live dashboard. The check history (every
+  run, changed or not) lives in the repo's Actions tab.
+
+  > **One-time repo setting required:** Settings → Actions → General →
+  > Workflow permissions → tick **"Allow GitHub Actions to create and
+  > approve pull requests"**. Without it, the workflow can push its branch
+  > but fails at the PR step (`GitHub Actions is not permitted to create or
+  > approve pull requests`).
 
 ## The confidence-tier system
 

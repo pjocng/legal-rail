@@ -15,13 +15,25 @@ release to release, so they're recorded here once, by hand, with their
 source noted -- and only the *current* "latest" row is re-scraped live,
 since that row is always cleanly separated in its own <tr>.
 
+Change detection: every run compares the freshly-scraped figures against
+what's already committed. If nothing meaningful moved -- same values, same
+periods -- the file is left completely untouched, so `git` sees no diff and
+the monthly Action opens no pull request. Only a genuine value change (or an
+added/removed data point) rewrites the file and, in CI, produces a
+reviewable PR. A run that only re-confirms the same numbers is a no-op, not
+noise. `fetched_at` on an unchanged record therefore means "when this value
+was last *different*", not "when it was last checked" -- the check history
+lives in the Actions run log.
+
 Usage:
     python adapters/world_prison_brief.py [--offline path/to/saved.html]
 
-Writes data/sources/world_prison_brief.json (validated before it's written).
+Writes data/sources/world_prison_brief.json only when something changed
+(validated before it's written).
 """
 import argparse
 import json
+import os
 import re
 import sys
 from datetime import date, datetime, timezone
@@ -164,6 +176,56 @@ def build_observations(soup):
     return observations
 
 
+def _identity(obs):
+    """What makes two observations 'the same data point'."""
+    return (obs["metric_id"], obs["period"], obs["scope"], obs.get("state"), obs["period_type"])
+
+
+def _meaningful(obs):
+    """The fields that constitute a *real* change. `fetched_at` and `notes`
+    (which just carries the source's as-of date) are bookkeeping -- a run that
+    only moves those is not a change worth a pull request."""
+    return {k: v for k, v in obs.items() if k not in ("fetched_at", "notes")}
+
+
+def _write_step_summary(text):
+    """If running inside GitHub Actions, surface a human-readable status on
+    the run's summary page. No-op locally."""
+    path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if path:
+        with open(path, "a", encoding="utf-8") as f:
+            f.write(text + "\n")
+
+
+def reconcile(fresh, existing):
+    """Merge freshly-scraped observations with what's already committed:
+    keep an unchanged record exactly as it was (preserving its original
+    fetched_at), take the new version of a changed record, and report every
+    add / change / removal. Returns (merged_list, changes)."""
+    existing_by_id = {_identity(o): o for o in existing}
+    fresh_keys = {_identity(o) for o in fresh}
+    merged = []
+    changes = []
+
+    for new_obs in fresh:
+        key = _identity(new_obs)
+        old = existing_by_id.get(key)
+        if old is None:
+            merged.append(new_obs)
+            changes.append(f"added   {new_obs['metric_id']} {new_obs['period']} = {new_obs['value']}")
+        elif _meaningful(old) != _meaningful(new_obs):
+            merged.append(new_obs)
+            changes.append(f"changed {new_obs['metric_id']} {new_obs['period']}: {old['value']} -> {new_obs['value']}")
+        else:
+            merged.append(old)  # unchanged -- keep verbatim, original fetched_at intact
+
+    for old in existing:
+        if _identity(old) not in fresh_keys:
+            changes.append(f"removed {old['metric_id']} {old['period']} (was {old['value']})")
+
+    return merged, changes
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--offline", help="Parse a saved HTML file instead of fetching live (for testing).")
@@ -178,9 +240,26 @@ def main():
 
     validate_observations(observations, source_label=SOURCE_ID)
 
+    existing = []
+    if OUT_PATH.exists():
+        existing = json.loads(OUT_PATH.read_text(encoding="utf-8"))
+
+    merged, changes = reconcile(observations, existing)
+
+    if existing and not changes:
+        print("No change: World Prison Brief figures are identical to the committed data. File left untouched.")
+        _write_step_summary("**World Prison Brief:** no change this run — figures identical to committed data.")
+        return
+
+    validate_observations(merged, source_label=SOURCE_ID)
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    OUT_PATH.write_text(json.dumps(observations, indent=2) + "\n", encoding="utf-8")
-    print(f"Wrote {len(observations)} observations to {OUT_PATH.relative_to(ROOT)}")
+    OUT_PATH.write_text(json.dumps(merged, indent=2) + "\n", encoding="utf-8")
+
+    print(f"Wrote {len(merged)} observations to {OUT_PATH.relative_to(ROOT)}")
+    print("Changes:")
+    for c in changes:
+        print(f"  {c}")
+    _write_step_summary("**World Prison Brief:** changes this run:\n\n" + "\n".join(f"- `{c}`" for c in changes))
 
 
 if __name__ == "__main__":
