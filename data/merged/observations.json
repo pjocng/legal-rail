@@ -79,15 +79,15 @@
     "state": null,
     "facility": null,
     "case_ref": null,
-    "value": 125.6,
-    "period": "2025",
+    "value": 126.3,
+    "period": "2026",
     "period_type": "point_in_time",
     "source_id": "world_prison_brief",
     "source_url": "https://www.prisonstudies.org/country/nigeria",
-    "fetched_at": "2026-08-31",
+    "fetched_at": "2026-11-01",
     "confidence_tier": 1,
     "verified_by": "scraper:world_prison_brief",
-    "notes": "As of 2025-06-30"
+    "notes": "As of 2026-11-01"
   },
   {
     "metric_id": "official_capacity",
@@ -97,15 +97,15 @@
     "state": null,
     "facility": null,
     "case_ref": null,
-    "value": 65035.0,
-    "period": "2025",
+    "value": 68486.0,
+    "period": "2026",
     "period_type": "point_in_time",
     "source_id": "world_prison_brief",
     "source_url": "https://www.prisonstudies.org/country/nigeria",
-    "fetched_at": "2026-08-31",
+    "fetched_at": "2026-11-01",
     "confidence_tier": 1,
     "verified_by": "scraper:world_prison_brief",
-    "notes": "As of 2025-06-30"
+    "notes": "As of 2026-11-01"
   },
   {
     "metric_id": "pretrial_detention_rate",
@@ -241,14 +241,14 @@
     "state": null,
     "facility": null,
     "case_ref": null,
-    "value": 81902.0,
+    "value": 86486.0,
     "period": "2026",
     "period_type": "point_in_time",
     "source_id": "world_prison_brief",
     "source_url": "https://www.prisonstudies.org/country/nigeria",
-    "fetched_at": "2026-08-31",
+    "fetched_at": "2026-11-01",
     "confidence_tier": 1,
     "verified_by": "scraper:world_prison_brief",
-    "notes": "As of 2026-06-22"
+    "notes": "As of 2026-11-01"
   }
 ]
